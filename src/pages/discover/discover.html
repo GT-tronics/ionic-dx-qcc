@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Discover</ion-title>
+  </ion-navbar>
+</ion-header>
+  
+<ion-content>
+
+  <ion-refresher (ionRefresh)="scanRefresh($event)" (ionPull)="scanPull($event)">
+    <ion-refresher-content pullingText="Pull to scan" refreshingText="Scanning ...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <ion-list-header color="light">
+        <h2>Linked Devices</h2>
+    </ion-list-header>
+    <ion-item-sliding *ngFor="let devInfo of linkedDevInfos" #item>
+      <ion-item (click)="connectDevice(item, devInfo)">
+          <h2>{{devInfo.name}}</h2>
+          <h4>{{devInfo.uuid}}</h4>
+          <ion-icon name="bluetooth"  *ngIf="devInfo.isConnected()" item-end></ion-icon>
+        </ion-item>
+      <ion-item-options>
+          <button ion-button *ngIf="!devInfo.isConnected()" color="primary" (click)="connectDevice(item, devInfo)">
+              <ion-icon name="bluetooth"></ion-icon>
+              Connect
+          </button>
+          <button ion-button *ngIf="devInfo.isConnected()" color="primary" (click)="disconnectDevice(item, devInfo)">
+              <ion-icon name="bluetooth"></ion-icon>
+              Disconnect
+          </button>
+          <button ion-button color="danger" (click)="removeDevice(item, devInfo)">
+              <ion-icon name="trash"></ion-icon>
+              Remove
+          </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  <ion-list>
+    <ion-list-header color="light">
+        <h2>Unlinked Devices</h2>
+    </ion-list-header>
+    <ion-item-sliding *ngFor="let devInfo of unlinkDevInfos" #item>
+      <ion-item (click)="connectDevice(item, devInfo)">
+          <h2>{{devInfo.name}}</h2>
+          <h4>{{devInfo.uuid}}</h4>
+          <ion-icon name="bluetooth"  *ngIf="devInfo.isConnected()" item-end></ion-icon>
+      </ion-item>
+    </ion-item-sliding>
+  </ion-list>
+
+</ion-content>
+  

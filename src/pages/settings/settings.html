@@ -1,0 +1,84 @@
+<!--
+  Generated template for the SettingsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-navbar>
+        <ion-title>Settings</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-item-group>
+        <ion-item-divider sticky color="dark">Pairing/Connect</ion-item-divider>
+        <ion-item>
+            <ion-label>Power On Paring</ion-label>
+            <ion-toggle [(ngModel)]="pwrOnPairing" (ngModelChange)="updatePowerOnPairing()"></ion-toggle>
+        </ion-item>
+        <ion-item>
+            <ion-label>Power On Connect</ion-label>
+            <ion-toggle [(ngModel)]="pwrOnConnect" (ngModelChange)="updatePowerOnConnect()"></ion-toggle>
+        </ion-item>
+        <ion-item>
+            <ion-label>Remain On Pairing</ion-label>
+            <ion-toggle [(ngModel)]="remainOnPairing" (ngModelChange)="updateRemainOnPairing()"></ion-toggle>
+        </ion-item>
+        <ion-item>
+            <ion-label>Reconnect Last Attempt</ion-label>
+            <ion-input text-right type="number" min=2 max=7 [(ngModel)]="reconnectLastAttempt" (ngModelChange)="updateReconnectLastAttempt()"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Connect Attempt Repeat</ion-label>
+            <ion-input text-right type="number" min=0 max=65535 [(ngModel)]="connectAttemptRepeat" (ngModelChange)="updateConnectAttemptRepeat()"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Pairing Timeout</ion-label>
+            <ion-input text-right type="number" min=10 max=65535 [(ngModel)]="pairingTimeout" (ngModelChange)="updatePairingTimeout()"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Connectable Timeout</ion-label>
+            <ion-input text-right type="number" min=0 max=65535 [(ngModel)]="connectableTimeout" (ngModelChange)="updateConnectableTimeout()"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Pairing Timeout To</ion-label>
+        </ion-item>
+        <ion-list inset radio-group>
+            <ion-item>
+                <ion-label>Idle</ion-label>
+                <ion-radio checked="{{pairingTimeoutToIdle}}" (ionSelect)="updatePairingTimeoutTo(1)"></ion-radio>
+            </ion-item>            
+            <ion-item>
+                <ion-label>Connectable</ion-label>
+                <ion-radio checked="!{{pairingTimeoutToIdle}}" (ionSelect)="updatePairingTimeoutTo(0)"></ion-radio>
+            </ion-item>            
+        </ion-list>
+        <ion-item>
+                <ion-label>Connect Policy</ion-label>
+        </ion-item>
+        <ion-list inset radio-group>
+            <ion-item>
+                <ion-label>Last Connected</ion-label>
+                <ion-radio checked="{{connectPolicyLast}}" (ionSelect)="updateConnectPolicy(1)"></ion-radio>
+            </ion-item>            
+            <ion-item>
+                <ion-label>PDL List</ion-label>
+                <ion-radio checked="!{{connectPolicyLast}}" (ionSelect)="updateConnectPolicy(0)"></ion-radio>
+            </ion-item>            
+        </ion-list>
+        <ion-item-divider sticky color="dark">Codec</ion-item-divider>
+        <ion-item>
+            <ion-label>APT-X</ion-label>
+            <ion-toggle [(ngModel)]="codecAptX" (ngModelChange)="updateCodec()"></ion-toggle>
+        </ion-item>
+        <ion-item>
+            <ion-label>APT-X-LL</ion-label>
+            <ion-toggle [(ngModel)]="codecAptXLL" (ngModelChange)="updateCodec()"></ion-toggle>
+        </ion-item>
+        <ion-item>
+            <ion-label>AAC</ion-label>
+            <ion-toggle [(ngModel)]="codecAac" (ngModelChange)="updateCodec()"></ion-toggle>
+        </ion-item>
+    </ion-item-group>
+</ion-content>
