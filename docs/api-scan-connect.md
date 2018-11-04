@@ -151,8 +151,8 @@ export class HomePage {
     // Connect
 
     // Get the 1st device from unlinked list
-    var unlinkList : BleDeviceInfo[] = this.dispatcher.getUnlinkDevices();
-    var devInfo : BleDeviceInfo = unlistList[0];
+    var unlinkList : BtDeviceInfo[] = this.dispatcher.getUnlinkDevices();
+    var devInfo : BtDeviceInfo = unlistList[0];
     var connectTimeout : number = 10000;  // 10s
 
     this.dispatcher.connect(devInfo.uuid, connectTimeout).then( ret => {
@@ -204,9 +204,9 @@ export class HomePage {
 
     // Disconnect (all)
 
-    var linkedList : BleDeviceInfo[] = this.dispatcher.getLinkedDevices();
+    var linkedList : BtDeviceInfo[] = this.dispatcher.getLinkedDevices();
 
-    for ( devInfo : BleDeviceInfo in linkedList )
+    for ( devInfo : BtDeviceInfo in linkedList )
         if( devInfo.state == DevState.CONNECTED )
         {
             this.dispatcher.disconnect(devInfo.uuid).catch( ret => {

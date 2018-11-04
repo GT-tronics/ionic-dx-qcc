@@ -7,16 +7,16 @@ To provide further abstraction and a standard method to handle AT commands, an a
 
 Below depicts the DataExchanger API stack and further below the links to show the specific APIs.
 
-![DataExchanger Stack](https://github.com/GT-tronics/ionic3-dx-stack/blob/master/docs/DX_API.png)
+![DataExchanger Stack](https://github.com/GT-tronics/ionic-dx-qcc/blob/master/docs/DX_API.png)
 
 ## Initialization
-* [Initialization](https://github.com/GT-tronics/ionic3-dx-stack/blob/master/docs/api-init.md)
+* [Initialization](https://github.com/GT-tronics/ionic-dx-qcc/blob/master/docs/api-init.md)
 
 ## Connection Management
-* [Scan and Connect](https://github.com/GT-tronics/ionic3-dx-stack/blob/master/docs/api-scan-connect.md)
-* [Device List](https://github.com/GT-tronics/ionic3-dx-stack/blob/master/docs/api-device-list.md)
+* [Scan and Connect](https://github.com/GT-tronics/ionic-dx-qcc/blob/master/docs/api-scan-connect.md)
+* [Device List](https://github.com/GT-tronics/ionic-dx-qcc/blob/master/docs/api-device-list.md)
 
 ## AT Command Dispatcher And Handler 
-* [AT Command Dispatch and Handler Explain](https://github.com/GT-tronics/ionic3-dx-stack/blob/master/docs/atcmd-dispatcher/api-dispatcher-handler-explain.md)
-* [Adding New Product (AT Command Handler)](https://github.com/GT-tronics/ionic3-dx-stack/blob/master/docs/atcmd-dispatcher/api-create-new-handler.md)
-* [QCC-SNK Handler](https://github.com/GT-tronics/ionic3-dx-stack/blob/master/docs/atcmd-dispatcher/api-qcc-snk-handler.md)
+* [AT Command Dispatch and Handler Explain](https://github.com/GT-tronics/ionic-dx-qcc/blob/master/docs/atcmd-dispatcher/api-dispatcher-handler-explain.md)
+* [Adding New Product (AT Command Handler)](https://github.com/GT-tronics/ionic-dx-qcc/blob/master/docs/atcmd-dispatcher/api-create-new-handler.md)
+* [QCC-SNK Handler](https://github.com/GT-tronics/ionic-dx-qcc/blob/master/docs/atcmd-dispatcher/api-qcc-snk-handler.md)

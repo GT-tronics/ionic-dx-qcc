@@ -48,8 +48,8 @@ export class AtCmdLogPage {
     this.bindedFunctions = {};
 
     fn = this.handleBleDevChanged.bind(this);
-    this.events.subscribe('BLE_DEV_CHANGED', fn);
-    this.bindedFunctions['BLE_DEV_CHANGED'] = fn;
+    this.events.subscribe('BT_DEV_CHANGED', fn);
+    this.bindedFunctions['BT_DEV_CHANGED'] = fn;
   }
 
   ionViewDidLeave()

@@ -86,7 +86,7 @@ export class AppModule {}
 Finally, you need to inject DataExchanger service into your application. Take a look at ~/Development/ionic/projects/ionic-dx-qcc/src/pages/discover/discover.ts. The key add-ons are shown in below.
 ```
 ...
-import { AtCmdDispatcherService, BleDeviceInfo } from '../../providers/atcmd-dispatcher/atcmd-dispatcher.service';
+import { AtCmdDispatcherService, BtDeviceInfo } from '../../providers/atcmd-dispatcher/atcmd-dispatcher.service';
 
 // Depending on the type of hardware, import the associated handlers
 import { ATCMDHDLQCCSNK } from '../../providers/atcmd-dispatcher/atcmd-handler-qcc-sink';
@@ -96,7 +96,7 @@ import { ATCMDHDLQCCSRC } from '../../providers/atcmd-dispatcher/atcmd-handler-q
 
 export class HomePage {
     ...
-    devInfo : BleDeviceInfo;
+    devInfo : BtDeviceInfo;
     
     constructor(
         ...

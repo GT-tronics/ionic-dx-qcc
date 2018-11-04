@@ -73,7 +73,7 @@ export namespace ATCMDHDL
             {
                 console.log("----connected----");
                 setTimeout(() => {
-                    this.events.publish("BLE_DEV_CHANGED", { 'action' : 'connect', 'name' : this.name, 'uuid' : this.uuid, 'info' : this.info });
+                    this.events.publish("BT_DEV_CHANGED", { 'action' : 'connect', 'name' : this.name, 'uuid' : this.uuid, 'info' : this.info });
                 }, 0);
             }        
         }
@@ -84,7 +84,7 @@ export namespace ATCMDHDL
             {
                 console.log("----disconnected----");
                 setTimeout(() => {
-                    this.events.publish("BLE_DEV_CHANGED", { 'action' : 'disconnect', 'name' : this.name, 'uuid' : this.uuid, 'info' : this.info });
+                    this.events.publish("BT_DEV_CHANGED", { 'action' : 'disconnect', 'name' : this.name, 'uuid' : this.uuid, 'info' : this.info });
                 }, 0);
             }        
         }

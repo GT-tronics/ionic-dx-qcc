@@ -1,7 +1,7 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
 import { Platform, Events } from 'ionic-angular';
 import { NavController, AlertController } from 'ionic-angular';
-import { AtCmdDispatcherService, BleDeviceInfo } from '../../providers/atcmd-dispatcher/atcmd-dispatcher.service';
+import { AtCmdDispatcherService, BtDeviceInfo } from '../../providers/atcmd-dispatcher/atcmd-dispatcher.service';
 
 // Changed to lazy loading
 // import { DeviceSnkPage } from '../../pages/device/device-snk'
@@ -14,9 +14,9 @@ import { AtCmdDispatcherService, BleDeviceInfo } from '../../providers/atcmd-dis
 })
 export class DiscoverPage 
 {
-  unlinkDevInfos : BleDeviceInfo[];
-  linkedDevInfos : BleDeviceInfo[];
-  connectingDevInfos : { uuid : string, BleDeviceInfo };
+  unlinkDevInfos : BtDeviceInfo[];
+  linkedDevInfos : BtDeviceInfo[];
+  connectingDevInfos : { uuid : string, BtDeviceInfo };
   connectedPageNames : { uuid : string, string };
 
   connectingPrompt : any = null;
@@ -30,10 +30,10 @@ export class DiscoverPage
     public dispatcher : AtCmdDispatcherService
   ) 
   {
-    this.connectingDevInfos = <{ uuid : string, BleDeviceInfo }>{};
+    this.connectingDevInfos = <{ uuid : string, BtDeviceInfo }>{};
     this.connectedPageNames = <{ uuid : string, string }>{};
 
-    events.subscribe('BLE_DEV_CHANGED', this.handleBleDevChanged.bind(this));
+    events.subscribe('BT_DEV_CHANGED', this.handleBleDevChanged.bind(this));
 
     this.dispatcher.init( sysEvtObj => {
       console.log("[DISCOVER] SysEvt: " + JSON.stringify(sysEvtObj));  
@@ -279,7 +279,7 @@ export class DiscoverPage
 
   // stopScanButtonPressed(event) {
   //   this.dispatcher.stopScan();
-  //   var unlinkDevInfoList : BleDeviceInfo[] = this.dispatcher.getUnlinkDevices();
+  //   var unlinkDevInfoList : BtDeviceInfo[] = this.dispatcher.getUnlinkDevices();
   //   for( var i = 0; i < unlinkDevInfoList.length; i++ )
   //   {
   //     var devInfo = unlinkDevInfoList[i];
@@ -289,12 +289,12 @@ export class DiscoverPage
 
   // connectButtonPressed(event) 
   // {
-  //   var linkedList : BleDeviceInfo[] = this.dispatcher.getLinkedDevices();
-  //   var unlinkList : BleDeviceInfo[] = this.dispatcher.getUnlinkDevices();
+  //   var linkedList : BtDeviceInfo[] = this.dispatcher.getLinkedDevices();
+  //   var unlinkList : BtDeviceInfo[] = this.dispatcher.getUnlinkDevices();
 
   //   if( linkedList.length > 0 )
   //   {
-  //     var sortedList: BleDeviceInfo[] = linkedList.sort((obj1, obj2) => {
+  //     var sortedList: BtDeviceInfo[] = linkedList.sort((obj1, obj2) => {
   //       if( obj1.active && obj2.active )
   //       {
   //         if (obj1.rssi > obj2.rssi) {
@@ -318,7 +318,7 @@ export class DiscoverPage
   //   }
   //   else if( unlinkList.length > 1 )
   //   {
-  //     var sortedList: BleDeviceInfo[] = unlinkList.sort((obj1, obj2) => {
+  //     var sortedList: BtDeviceInfo[] = unlinkList.sort((obj1, obj2) => {
   //       if (obj1.rssi > obj2.rssi) {
   //           return -1;
   //       }

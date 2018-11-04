@@ -1,7 +1,7 @@
 import { Component, NgZone } from '@angular/core';
 import { Platform, Events, IonicPage } from 'ionic-angular';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
-import { AtCmdDispatcherService, BleDeviceInfo } from '../../providers/atcmd-dispatcher/atcmd-dispatcher.service';
+import { AtCmdDispatcherService, BtDeviceInfo } from '../../providers/atcmd-dispatcher/atcmd-dispatcher.service';
 import { ATCMDHDLQCCSRC } from '../../providers/atcmd-dispatcher/atcmd-handler-qcc-src';
 
 @IonicPage()
@@ -12,7 +12,7 @@ import { ATCMDHDLQCCSRC } from '../../providers/atcmd-dispatcher/atcmd-handler-q
 })
 export class DeviceSrcPage 
 {
-  protected devInfo : BleDeviceInfo;
+  protected devInfo : BtDeviceInfo;
   protected pdlRecs : ATCMDHDLQCCSRC.PdlRec[] = [];
   protected deviceState : string = "IDLE";
   protected streamState : string = "STOP";
@@ -59,8 +59,8 @@ export class DeviceSrcPage
     this.bindedFunctions = {};
 
     fn = this.handleBleDevChanged.bind(this);
-    this.events.subscribe('BLE_DEV_CHANGED', fn);
-    this.bindedFunctions['BLE_DEV_CHANGED'] = fn;
+    this.events.subscribe('BT_DEV_CHANGED', fn);
+    this.bindedFunctions['BT_DEV_CHANGED'] = fn;
 
     fn = this.handlePdlChanged.bind(this);
     this.events.subscribe('QCC_SRC_PDL_CHANGED', fn);

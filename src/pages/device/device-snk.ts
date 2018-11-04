@@ -1,7 +1,7 @@
 import { Component, NgZone } from '@angular/core';
 import { Platform, Events, IonicPage } from 'ionic-angular';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
-import { AtCmdDispatcherService, BleDeviceInfo } from '../../providers/atcmd-dispatcher/atcmd-dispatcher.service';
+import { AtCmdDispatcherService, BtDeviceInfo } from '../../providers/atcmd-dispatcher/atcmd-dispatcher.service';
 import { ATCMDHDLQCCSNK } from '../../providers/atcmd-dispatcher/atcmd-handler-qcc-sink';
 
 @IonicPage()
@@ -12,7 +12,7 @@ import { ATCMDHDLQCCSNK } from '../../providers/atcmd-dispatcher/atcmd-handler-q
 })
 export class DeviceSnkPage 
 {
-  protected devInfo : BleDeviceInfo;
+  protected devInfo : BtDeviceInfo;
   protected pdlRecs : ATCMDHDLQCCSNK.PdlRec[] = [];
   protected deviceState : string = "IDLE";
   protected streamState : string = "STOP";
@@ -74,8 +74,8 @@ export class DeviceSnkPage
     this.bindedFunctions = {};
 
     fn = this.handleBleDevChanged.bind(this);
-    this.events.subscribe('BLE_DEV_CHANGED', fn);
-    this.bindedFunctions['BLE_DEV_CHANGED'] = fn;
+    this.events.subscribe('BT_DEV_CHANGED', fn);
+    this.bindedFunctions['BT_DEV_CHANGED'] = fn;
 
     fn = this.handlePdlChanged.bind(this);
     this.events.subscribe('QCC_SNK_PDL_CHANGED', fn);
@@ -252,7 +252,7 @@ export class DeviceSnkPage
 
   refreshPdl()
   {
-    // var linkedList : BleDeviceInfo[] = this.dispatcher.getLinkedDevices();
+    // var linkedList : BtDeviceInfo[] = this.dispatcher.getLinkedDevices();
     // var foundIdx = -1;
 
     // // Find the 1st connected device

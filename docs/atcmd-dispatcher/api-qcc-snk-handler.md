@@ -44,7 +44,7 @@
 * [Get Timer Value](#get-timer-value)
 ## Event Notifications
 Event notification is implemented as [Ionic Event](https://ionicframework.com/docs/api/util/Events/). To receive the notification, import the "Events" service and subscribe the event with the EventId string for each event.  
-* [BLE Device Changed Event](#ble-device-changed-event) 
+* [BT Device Changed Event](#bt-device-changed-event) 
 * [PDL Changed Event](#pdl-changed-event)
 * [RSSI Changed Event](#rssi-changed-event)
 * [Volume Changed Event](#volume-changed-event)
@@ -1309,8 +1309,8 @@ getTimerValue(cache : boolean) : Promise
 ```
 ```
 
-## BLE Device Changed Event
-* event id : "BLE_DEV_CHANGED"
+## BT Device Changed Event
+* event id : "BT_DEV_CHANGED"
 * event object
     ```
     {

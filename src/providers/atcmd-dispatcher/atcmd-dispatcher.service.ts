@@ -20,7 +20,7 @@ export enum DevState
     CONNECTED,
 };
 
-export class BleDeviceInfo {
+export class BtDeviceInfo {
     public uuid : string;
     public name : string;
     public customName : string;
@@ -89,7 +89,7 @@ interface Map<T> {
     [s : string] : T;
 }
 
-interface BleDeviceInfoMap extends Map<BleDeviceInfo>{
+interface BtDeviceInfoMap extends Map<BtDeviceInfo>{
 }
 
 interface AtCmdHandlerMap extends Map<ATCMDHDL.AtCmdHandler> {
@@ -104,8 +104,8 @@ interface AtCmdHandlerMap extends Map<ATCMDHDL.AtCmdHandler> {
 export class AtCmdDispatcherService {
 
     // member variables
-    private btDevLinkedList : BleDeviceInfoMap;
-    private btDevUnlinkList : BleDeviceInfoMap;
+    private btDevLinkedList : BtDeviceInfoMap;
+    private btDevUnlinkList : BtDeviceInfoMap;
     private dataChHandlerList : AtCmdHandlerMap;
     private cmdChHandlerList : AtCmdHandlerMap;
 
@@ -124,12 +124,12 @@ export class AtCmdDispatcherService {
         this.cmdChHandlerList = <AtCmdHandlerMap>{};
 
         // Ths list holds all the discovered but unlinked device info
-        this.btDevUnlinkList = <BleDeviceInfoMap>{};
+        this.btDevUnlinkList = <BtDeviceInfoMap>{};
 
         // Ths list holds all the discovered and linked device info
         // - FIXME: linked list should be persistent, therefore we should read 
         //   it from storage
-        this.btDevLinkedList = <BleDeviceInfoMap>{};
+        this.btDevLinkedList = <BtDeviceInfoMap>{};
 
         // Instantiate ATCMD handler sub classes
         // - FIXME: should not done here
@@ -155,8 +155,8 @@ export class AtCmdDispatcherService {
               if( obj.state == 'init' ) {
                 console.log("[Diaptcher] init success");
                 // Reset device lists
-                this.btDevLinkedList = <BleDeviceInfoMap>{};
-                this.btDevUnlinkList = <BleDeviceInfoMap>{};
+                this.btDevLinkedList = <BtDeviceInfoMap>{};
+                this.btDevUnlinkList = <BtDeviceInfoMap>{};
                 resolve(obj);
               }
             }).catch((obj) => {
@@ -219,7 +219,7 @@ export class AtCmdDispatcherService {
         return false;
     }
 
-    getLinkedDevices() : BleDeviceInfo[] {
+    getLinkedDevices() : BtDeviceInfo[] {
         let values = [];
         for( var key in this.btDevLinkedList )
         {
@@ -228,7 +228,7 @@ export class AtCmdDispatcherService {
         return values;
     }
 
-    getUnlinkDevices() : BleDeviceInfo[] 
+    getUnlinkDevices() : BtDeviceInfo[] 
     {
         let values = [];
         for( var key in this.btDevUnlinkList )
@@ -258,14 +258,14 @@ export class AtCmdDispatcherService {
         this.scanFailureCb = failure;
 
         // Clear the unlink list 1st
-        this.btDevUnlinkList = <BleDeviceInfoMap>{};
+        this.btDevUnlinkList = <BtDeviceInfoMap>{};
 
         // We don't need to touch the linked list 
         // - as the list is persistent
 
         // Start BLE scanning
         // - the success and failure functions will be called repeatively.
-        // - for any new device found, it will be added in a list (bleDevices)
+        // - for any new device found, it will be added in a list (btDevices)
         // - app should refresh the screen with the list.
         this.dx.startScan(
             // success
@@ -294,7 +294,7 @@ export class AtCmdDispatcherService {
                 return;
             }
 
-            var devInfo : BleDeviceInfo;
+            var devInfo : BtDeviceInfo;
     
             if( this.btDevUnlinkList[uuid] )
             {
@@ -374,7 +374,7 @@ export class AtCmdDispatcherService {
 
     disconnect(uuid : string):Promise<any> 
     {
-        var devInfo : BleDeviceInfo;
+        var devInfo : BtDeviceInfo;
     
         if( this.btDevUnlinkList[uuid] )
         {
@@ -426,7 +426,7 @@ export class AtCmdDispatcherService {
         //console.log(obj);
         if (obj.state == 'active') {
             // Active
-            var newDevInfo : BleDeviceInfo = new BleDeviceInfo();
+            var newDevInfo : BtDeviceInfo = new BtDeviceInfo();
             newDevInfo.name = obj.info.NAME;
             newDevInfo.uuid = obj.info.UUID;
             newDevInfo.rssi = obj.info.RSSI;
@@ -468,7 +468,7 @@ export class AtCmdDispatcherService {
             console.log("[Dispatcher] " + obj.info.UUID + " connected");
             console.log(obj);
 
-            var devInfo : BleDeviceInfo;
+            var devInfo : BtDeviceInfo;
             var isLinked = true;
 
             devInfo = this.btDevLinkedList[obj.info.UUID]
@@ -558,7 +558,7 @@ export class AtCmdDispatcherService {
             console.log("[Dispatcher] " + obj.info.UUID + " disconnected");
             //console.log(obj);
 
-            var devInfo : BleDeviceInfo;
+            var devInfo : BtDeviceInfo;
 
             devInfo = this.btDevLinkedList[obj.info.UUID];
             if( !devInfo ) {

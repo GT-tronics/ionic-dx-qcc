@@ -16,7 +16,7 @@ export class DataExchangerService {
     deviceUUID: any;
     isConnected: any;
     isScanning: any;
-    isBLEDisabled: any;
+    isBtDisabled: any;
     bufferRxDataCRLF: any;
     rxDataBuffer: any;
     dxDataList: any;
@@ -47,7 +47,7 @@ export class DataExchangerService {
         this.deviceUUID = null;
         this.isConnected = null;
         this.isScanning = null;
-        this.isBLEDisabled = null;
+        this.isBtDisabled = null;
         this.bufferRxDataCRLF = null;
         this.rxDataBuffer = null;
         this.rxLastDate = null;
@@ -81,7 +81,7 @@ export class DataExchangerService {
                 }
                 this.isConnected = false;
                 this.isScanning = false;
-                this.isBLEDisabled = true;
+                this.isBtDisabled = true;
                 this.inited = true;
                 this.deviceUUID = null;
                 this.rxDataBuffer = '';
@@ -108,19 +108,19 @@ export class DataExchangerService {
                         function(obj) {
                             // success
                             // typeof success !== 'undefined' && success(obj);
-                            // console.log('[DX] BLE init success');
+                            // console.log('[DX] BT init success');
                             if(obj.state == 'init') {
                                 console.log('[DX] init success');
                                 resolve(obj);
                             } else if(obj.state == 'syson' || obj.state == 'sysoff') {
                                 console.log('[DX] Event: ' + obj.state);
-                                this.isBLEDisabled = obj.state == 'sysoff' ? true : false;
+                                this.isBtDisabled = obj.state == 'sysoff' ? true : false;
                                 //this.onSysEvent(obj.state);
                                 typeof sysEvtCb(obj) !== 'undefined' && sysEvtCb(obj);
                             } else if(obj.state == 'sysreset') {
                                 console.log('[DX] BT system reset');
                                 // TODO: is it really = false?
-                                this.isBLEDisabled = false;
+                                this.isBtDisabled = false;
                                 //this.onSysEvent(obj.state);
                                 typeof sysEvtCb(obj) !== 'undefined' && sysEvtCb(obj);
                             } else {
@@ -155,7 +155,7 @@ export class DataExchangerService {
                         obj.info.NAME != null &&
                         obj.info.RSSI != null && 
                         obj.state != null ) {
-                        console.log ('[DX] BLE Scanned: ' + obj.info.NAME + '[' + obj.info.RSSI + ']' + '[' + obj.state + ']' );
+                        console.log ('[DX] BT Scanned: ' + obj.info.NAME + '[' + obj.info.RSSI + ']' + '[' + obj.state + ']' );
                         this.deviceUUID && console.log('[DX] already connected to UUID: ' + this.deviceUUID);
                         typeof success(obj) !== 'undefined' && success(obj);
                     }
@@ -164,7 +164,7 @@ export class DataExchangerService {
                 function(obj) {
                     // console.log("startScan fail");
                     // console.log(obj);
-                    console.log ('[DX] BLE scan error');
+                    console.log ('[DX] BT scan error');
                     this.isScanning = false;
                     typeof failure(obj) !== 'undefined' && failure(obj);
                 }.bind(this)
@@ -234,11 +234,11 @@ export class DataExchangerService {
                             }
                         );
 
-                        this.isBLEDisabled = false;
+                        this.isBtDisabled = false;
                         this.onConnected();
                     } else {
                         console.log ('[DX] Disconnected deviceUUID - ' +obj.info.UUID);
-                        this.isBLEDisabled = false;
+                        this.isBtDisabled = false;
                         this.isConnected = false;
                         this.isResetBle = true;
                         this.deviceUUID = null;
@@ -260,7 +260,7 @@ export class DataExchangerService {
                 }.bind(this),
                 function(obj) {
                     //failure
-                    console.log ('[DX] BLE connect error');
+                    console.log ('[DX] BT connect error');
                     typeof failure(obj) !== 'undefined' && failure(obj);
                     if( this.readyDelayTimeout )
                     {
@@ -294,7 +294,7 @@ export class DataExchangerService {
                     function(obj) {},
                     // Failed
                     function(obj) {
-                        console.log ('[DX] BLE disconnect request error');
+                        console.log ('[DX] BT disconnect request error');
                         reject(obj);
                     }
                 )
@@ -548,7 +548,7 @@ export class DataExchangerService {
     onDisconnected() {
     }
 
-    // On BLE system change events.
+    // On BT system change events.
     //
     // Parameter :
     // state = state of system 
@@ -557,11 +557,11 @@ export class DataExchangerService {
         var alertTitle;
         var alertMessage;
         if (state == 'sysoff') {
-            alertTitle = "BLE Error";
+            alertTitle = "BT Error";
             alertMessage = "Please make sure your Bluetooth is turned on, otherwise it will not work properly.";
             this.showErrorAlert(alertTitle,alertMessage);
         } else if (state == 'sysreset') {
-            alertTitle = "BLE Reset";
+            alertTitle = "BT Reset";
             alertMessage = "The Bluetooth system already reset";
             this.showErrorAlert(alertTitle,alertMessage);
         }
