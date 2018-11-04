@@ -6,6 +6,7 @@ If you have not install Ionic and prepare the cordova building platform, follow 
 * [Install Ionic](https://ionicframework.com/getting-started)
 * [Prepare Cordova iOS Platform](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/index.html)
 * [Prepare Corodva Android Platform](https://cordova.apache.org/docs/en/latest/guide/platforms/android/#requirements-and-support)
+
 Please make sure the version of each installed component is the same as the follows:
 ```
 ionic info
