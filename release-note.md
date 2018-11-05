@@ -1,5 +1,10 @@
 # Release Notes for Ionic DataExchanger QCC 
 
+## R 0.8.2
+* fixed no PDL refresh bug
+* fixed incorrect profile display
+* set blue icon for active hfp and a2dp profile display
+
 ## R 0.8.1
 * updated README.md
 

@@ -49,20 +49,22 @@
         <ion-item-sliding *ngFor="let pdlRec of pdlRecs" #item>
    
             <ion-item (click)="connectPdl(item, pdlRec)">
-                <ion-icon name="musical-notes" *ngIf="pdlRec.isMusicProvisioned" item-start></ion-icon>
-                <ion-icon name="call" *ngIf="pdlRec.isPhoneProvisioned" item-start></ion-icon>
+                <ion-icon name="musical-notes" color="primary" *ngIf="pdlRec.isMusicProvisioned && pdlRec.isMusicConnected" item-start></ion-icon>
+                <ion-icon name="musical-notes" *ngIf="pdlRec.isMusicProvisioned && !pdlRec.isMusicConnected" item-start></ion-icon>
+                <ion-icon name="call" color="primary" *ngIf="pdlRec.isPhoneProvisioned && pdlRec.isPhoneConnected" item-start></ion-icon>
+                <ion-icon name="call" *ngIf="pdlRec.isPhoneProvisioned && !pdlRec.isPhoneConnected" item-start></ion-icon>
                 <h2>{{pdlRec.remoteDevName}}</h2>
                 <h4>{{pdlRec.addr}}</h4>
-                <ion-icon name="bluetooth"  *ngIf="pdlRec.isMusicConnected" item-end></ion-icon>
-                <ion-note *ngIf="pdlRec.isMusicConnected" item-end>{{pdlRec.rssi}}dBm</ion-note>
+                <ion-icon name="bluetooth" color="primary" *ngIf="pdlRec.isMusicConnected || pdlRec.isPhoneConnected" item-end></ion-icon>
+                <!-- <ion-note *ngIf="pdlRec.isMusicConnected" item-end>{{pdlRec.rssi}}dBm</ion-note> -->
             </ion-item>
   
             <ion-item-options>
-                <button ion-button *ngIf="!pdlRec.isMusicConnected" color="primary" (click)="connectPdl(item, pdlRec)">
+                <button ion-button *ngIf="!pdlRec.isMusicConnected && !pdlRec.isPhoneConnected" color="primary" (click)="connectPdl(item, pdlRec)">
                     <ion-icon name="bluetooth"></ion-icon>
                     Connect
                 </button>
-                <button ion-button *ngIf="pdlRec.isMusicConnected" color="primary" (click)="disconnectPdl(item, pdlRec)">
+                <button ion-button *ngIf="pdlRec.isMusicConnected || pdlRec.isPhoneConnected" color="primary" (click)="disconnectPdl(item, pdlRec)">
                     <ion-icon name="bluetooth"></ion-icon>
                     Disconnect
                 </button>

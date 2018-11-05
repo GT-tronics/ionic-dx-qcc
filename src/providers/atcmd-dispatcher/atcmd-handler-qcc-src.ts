@@ -598,7 +598,7 @@ export namespace ATCMDHDLQCCSRC
                     isPhoneProvisioned = true;
                 }
 
-                if( provisionProfile & 0x2 )
+                if( provisionProfile & 0xc )
                 {
                     isMusicProvisioned = true;
                 }
@@ -609,13 +609,13 @@ export namespace ATCMDHDLQCCSRC
                 {
                     isPhoneConnected = ConnectState.PRIMARY;
                 }
-                else
+                else if( (connectedProfile & 0x3) != 0x0 )
                 {
                     isPhoneConnected = ConnectState.ERROR;
                 }
 
                 // Determine a2dp/music connect status
-                if( (connectedProfile & 0xc) == 0xc )
+                if( (connectedProfile & 0xc) )
                 {
                     isMusicConnected = ConnectState.ERROR;
                 }
@@ -626,21 +626,6 @@ export namespace ATCMDHDLQCCSRC
                         isMusicConnected = ConnectState.PRIMARY;
                     }
                     else if( connectedProfile & 0x20 )
-                    {
-                        isMusicConnected = ConnectState.SECONDARY;
-                    }
-                    else
-                    {
-                        isMusicConnected = ConnectState.ERROR;
-                    }
-                }
-                else if( connectedProfile & 0x8 )
-                {
-                    if( connectedProfile & 0x40 )
-                    {
-                        isMusicConnected = ConnectState.PRIMARY;
-                    }
-                    else if( connectedProfile & 0x80 )
                     {
                         isMusicConnected = ConnectState.SECONDARY;
                     }
@@ -865,7 +850,7 @@ export namespace ATCMDHDLQCCSRC
             super(uuid, 'AT+PDLU?', "\\+PDLU\\:(.+)", cb, events);
 
             // Enable broadcast
-            this.eventId = "QCC_SRC_VOLUME_CHANGED";
+            this.eventId = "QCC_SRC_PDL_CHANGED";
         }
 
         match(matchAry : any[]) 
