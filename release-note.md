@@ -1,5 +1,10 @@
 # Release Notes for Ionic DataExchanger QCC 
 
+## R 0.8.3
+* replaced the providers directory with the git submodule of https://github.com/GT-tronics/ionic-dx-providers
+    * so we can share the same provider with other projects
+    * the provider code is identical to previous release.
+
 ## R 0.8.2
 * fixed no PDL refresh bug
 * fixed incorrect profile display
