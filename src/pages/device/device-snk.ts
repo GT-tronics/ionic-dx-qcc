@@ -593,7 +593,7 @@ export class DeviceSnkPage
 
   navToSettingsPage()
   {
-    this.navCtrl.push('SettingsPage', {'atCmdHandler' : this.qccSnkHandler}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
+    this.navCtrl.push('SettingsSnkPage', {'atCmdHandler' : this.qccSnkHandler}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
   }
 
 }

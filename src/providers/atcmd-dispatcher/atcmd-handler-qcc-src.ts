@@ -27,6 +27,7 @@ export namespace ATCMDHDLQCCSRC
         public atCmdCR : AtCmdRec_CR;
         public atCmdVL : AtCmdRec_VL;
         public atCmdPDLU : AtCmdRec_PDLU;
+        public atCmdDCQ : AtCmdRec_DCQ;
 
         constructor(
             uuid : string, 
@@ -52,6 +53,10 @@ export namespace ATCMDHDLQCCSRC
             // AT+VL?
             this.atCmdVL = new AtCmdRec_VL(this.uuid, this.atCmdRspCallback.bind(this), events);
             this.addAtCmdRecToParser(this.atCmdVL, false);
+                                    
+            // AT+DCQ=
+            this.atCmdDCQ = new AtCmdRec_DCQ(this.uuid, this.atCmdRspCallbackNoBroadcast.bind(this), events);
+            this.addAtCmdRecToParser(this.atCmdDCQ, false);
                                     
             // AT+PDL?
             this.atCmdPDL = new AtCmdRec_PDL(this.uuid, this.atCmdRspCallback_PDL.bind(this), events);
@@ -342,6 +347,118 @@ export namespace ATCMDHDLQCCSRC
             });       
         }
 
+
+        public setEnableDualStream( onOff : boolean ) : Promise<any>
+        {
+            var cmd = "AT+DCS=1," + (onOff ?"1" :"0");
+            return new Promise((resolve, reject) => {
+                this.sendCmd(cmd, this.seqId++).then( obj => {
+                    console.log("[" + cmd + "] sent ok");
+                    this.atCmdDCQ.enableDualStream = onOff;
+                    resolve({"retCode":0,"status":"success"});
+                }).catch( obj => {
+                    console.log("[" + cmd + "] sent failed");
+                    reject({"retCode":-1,"status":"timeout expired"});
+                });
+            });       
+        }
+
+
+        public setAutoReconnect2ndDevice( onOff : boolean ) : Promise<any>
+        {
+            var cmd = "AT+DCS=2," + (onOff ?"1" :"0");
+            return new Promise((resolve, reject) => {
+                this.sendCmd(cmd, this.seqId++).then( obj => {
+                    console.log("[" + cmd + "] sent ok");
+                    this.atCmdDCQ.autoReconnect2ndDevice = onOff;
+                    resolve({"retCode":0,"status":"success"});
+                }).catch( obj => {
+                    console.log("[" + cmd + "] sent failed");
+                    reject({"retCode":-1,"status":"timeout expired"});
+                });
+            });       
+        }
+
+
+        public setForceAvrcpVolMuteSync( onOff : boolean ) : Promise<any>
+        {
+            var cmd = "AT+DCS=3," + (onOff ?"1" :"0");
+            return new Promise((resolve, reject) => {
+                this.sendCmd(cmd, this.seqId++).then( obj => {
+                    console.log("[" + cmd + "] sent ok");
+                    this.atCmdDCQ.forceAvrcpVolMuteSync = onOff;
+                    resolve({"retCode":0,"status":"success"});
+                }).catch( obj => {
+                    console.log("[" + cmd + "] sent failed");
+                    reject({"retCode":-1,"status":"timeout expired"});
+                });
+            });       
+        }
+
+
+        public setForceAvrcpVolMuteSyncDelay( delay : number ) : Promise<any>
+        {
+            var cmd = "AT+DCS=4," + delay;
+            return new Promise((resolve, reject) => {
+                this.sendCmd(cmd, this.seqId++).then( obj => {
+                    console.log("[" + cmd + "] sent ok");
+                    this.atCmdDCQ.forceAvrcpVolMuteSyncDelay = delay;
+                    resolve({"retCode":0,"status":"success"});
+                }).catch( obj => {
+                    console.log("[" + cmd + "] sent failed");
+                    reject({"retCode":-1,"status":"timeout expired"});
+                });
+            });       
+        }
+
+        public setEnableRoleMismatchReconnectMedia( onOff : boolean ) : Promise<any>
+        {
+            var cmd = "AT+DCS=5," + (onOff ?"1" :"0");
+            return new Promise((resolve, reject) => {
+                this.sendCmd(cmd, this.seqId++).then( obj => {
+                    console.log("[" + cmd + "] sent ok");
+                    this.atCmdDCQ.enableRoleMismatchReconnectMedia = onOff;
+                    resolve({"retCode":0,"status":"success"});
+                }).catch( obj => {
+                    console.log("[" + cmd + "] sent failed");
+                    reject({"retCode":-1,"status":"timeout expired"});
+                });
+            });       
+        }
+
+
+        public setEnablePktSzMismatchReconnectMedia( onOff : boolean ) : Promise<any>
+        {
+            var cmd = "AT+DCS=6," + (onOff ?"1" :"0");
+            return new Promise((resolve, reject) => {
+                this.sendCmd(cmd, this.seqId++).then( obj => {
+                    console.log("[" + cmd + "] sent ok");
+                    this.atCmdDCQ.enablePktSzMismatchReconnectMedia = onOff;
+                    resolve({"retCode":0,"status":"success"});
+                }).catch( obj => {
+                    console.log("[" + cmd + "] sent failed");
+                    reject({"retCode":-1,"status":"timeout expired"});
+                });
+            });       
+        }
+
+
+        public setEnableHfp( onOff : boolean ) : Promise<any>
+        {
+            var cmd = "AT+DCS=7," + (onOff ?"1" :"0");
+            return new Promise((resolve, reject) => {
+                this.sendCmd(cmd, this.seqId++).then( obj => {
+                    console.log("[" + cmd + "] sent ok");
+                    this.atCmdDCQ.enableHfp = onOff;
+                    resolve({"retCode":0,"status":"success"});
+                }).catch( obj => {
+                    console.log("[" + cmd + "] sent failed");
+                    reject({"retCode":-1,"status":"timeout expired"});
+                });
+            });       
+        }
+
+        
         //
         // Getters
         //
@@ -505,6 +622,159 @@ export namespace ATCMDHDLQCCSRC
             });
         }
 
+
+        public getEnableDualStream(cache : boolean = true) : Promise<any>
+        {
+            if( cache && this.atCmdDCQ.enableDualStreamCached )
+            {
+                return new Promise ((resolve, reject) => {
+                    resolve(this.atCmdDCQ.enableDualStream);
+                });
+            }
+
+            var cmd = this.atCmdDCQ.cmd + "1";
+            return new Promise((resolve, reject) => {
+                this.atCmdRefresh(cmd).then( obj => {
+                    console.log("[" + cmd + "] sent ok");
+                    resolve(this.atCmdDCQ.enableDualStream);
+                }).catch( obj => {
+                    console.log("[" + cmd + "] sent failed");
+                    reject({"retCode":-1,"status":"timeout expired"});
+                });
+            });
+        }
+
+
+        public getAutoReconnect2ndDevice(cache : boolean = true) : Promise<any>
+        {
+            if( cache && this.atCmdDCQ.autoReconnect2ndDeviceCached )
+            {
+                return new Promise ((resolve, reject) => {
+                    resolve(this.atCmdDCQ.autoReconnect2ndDevice);
+                });
+            }
+
+            var cmd = this.atCmdDCQ.cmd + "2";
+            return new Promise((resolve, reject) => {
+                this.atCmdRefresh(cmd).then( obj => {
+                    console.log("[" + cmd + "] sent ok");
+                    resolve(this.atCmdDCQ.autoReconnect2ndDevice);
+                }).catch( obj => {
+                    console.log("[" + cmd + "] sent failed");
+                    reject({"retCode":-1,"status":"timeout expired"});
+                });
+            });
+        }
+
+
+        public getForceAvrcpVolMuteSync(cache : boolean = true) : Promise<any>
+        {
+            if( cache && this.atCmdDCQ.forceAvrcpVolMuteSyncCached )
+            {
+                return new Promise ((resolve, reject) => {
+                    resolve(this.atCmdDCQ.forceAvrcpVolMuteSync);
+                });
+            }
+
+            var cmd = this.atCmdDCQ.cmd + "3";
+            return new Promise((resolve, reject) => {
+                this.atCmdRefresh(cmd).then( obj => {
+                    console.log("[" + cmd + "] sent ok");
+                    resolve(this.atCmdDCQ.forceAvrcpVolMuteSync);
+                }).catch( obj => {
+                    console.log("[" + cmd + "] sent failed");
+                    reject({"retCode":-1,"status":"timeout expired"});
+                });
+            });
+        }
+
+
+        public getForceAvrcpVolMuteSyncDelay(cache : boolean = true) : Promise<any>
+        {
+            if( cache && this.atCmdDCQ.forceAvrcpVolMuteSyncDelayCached )
+            {
+                return new Promise ((resolve, reject) => {
+                    resolve(this.atCmdDCQ.forceAvrcpVolMuteSyncDelay);
+                });
+            }
+
+            var cmd = this.atCmdDCQ.cmd + "4";
+            return new Promise((resolve, reject) => {
+                this.atCmdRefresh(cmd).then( obj => {
+                    console.log("[" + cmd + "] sent ok");
+                    resolve(this.atCmdDCQ.forceAvrcpVolMuteSyncDelay);
+                }).catch( obj => {
+                    console.log("[" + cmd + "] sent failed");
+                    reject({"retCode":-1,"status":"timeout expired"});
+                });
+            });
+        }
+
+
+        public getEnableRoleMismatchReconnectMedia(cache : boolean = true) : Promise<any>
+        {
+            if( cache && this.atCmdDCQ.enableRoleMismatchReconnectMediaCached )
+            {
+                return new Promise ((resolve, reject) => {
+                    resolve(this.atCmdDCQ.enableRoleMismatchReconnectMedia);
+                });
+            }
+
+            var cmd = this.atCmdDCQ.cmd + "5";
+            return new Promise((resolve, reject) => {
+                this.atCmdRefresh(cmd).then( obj => {
+                    console.log("[" + cmd + "] sent ok");
+                    resolve(this.atCmdDCQ.enableRoleMismatchReconnectMedia);
+                }).catch( obj => {
+                    console.log("[" + cmd + "] sent failed");
+                    reject({"retCode":-1,"status":"timeout expired"});
+                });
+            });
+        }
+
+
+        public getEnablePktSzMismatchReconnectMedia(cache : boolean = true) : Promise<any>
+        {
+            if( cache && this.atCmdDCQ.enablePktSzMismatchReconnectMediaCached )
+            {
+                return new Promise ((resolve, reject) => {
+                    resolve(this.atCmdDCQ.enablePktSzMismatchReconnectMedia);
+                });
+            }
+
+            var cmd = this.atCmdDCQ.cmd + "6";
+            return new Promise((resolve, reject) => {
+                this.atCmdRefresh(cmd).then( obj => {
+                    console.log("[" + cmd + "] sent ok");
+                    resolve(this.atCmdDCQ.enablePktSzMismatchReconnectMedia);
+                }).catch( obj => {
+                    console.log("[" + cmd + "] sent failed");
+                    reject({"retCode":-1,"status":"timeout expired"});
+                });
+            });
+        }
+
+
+        public getEnableHfp(cache : boolean = true) : Promise<any>
+        {
+            if( cache && this.atCmdDCQ.enableHfpCached )
+            {
+                return new Promise ((resolve, reject) => {
+                    resolve(this.atCmdDCQ.enableHfp);
+                });
+            }
+
+            var cmd = this.atCmdDCQ.cmd + "7";
+            return new Promise((resolve, reject) => {
+                this.atCmdRefresh(cmd).then( obj => {
+                    console.log("[" + cmd + "] sent ok");
+                    resolve(this.atCmdDCQ.enableHfp);
+                }).catch( obj => {
+                    console.log("[" + cmd + "] sent failed");
+                    reject({"retCode":-1,"status":"timeout expired"});
+                });
+            });
+        }
     }
 
     interface Map<T> {
@@ -869,6 +1139,116 @@ export namespace ATCMDHDLQCCSRC
             super.match(matchAry);
         }
     }
+
+    //
+    // AT+DCQ AT-CMD Record
+    //
+
+    export class AtCmdRec_DCQ extends ATCMDHDL.AtCmdRec 
+    {
+        public enableDualStream : boolean;
+        public autoReconnect2ndDevice : boolean;
+        public forceAvrcpVolMuteSync : boolean;
+        public forceAvrcpVolMuteSyncDelay : number;
+        public enableRoleMismatchReconnectMedia : boolean;
+        public enablePktSzMismatchReconnectMedia : boolean;
+        public enableHfp : boolean;
+
+        public enableDualStreamCached : boolean = false;
+        public autoReconnect2ndDeviceCached : boolean = false;
+        public forceAvrcpVolMuteSyncCached : boolean = false;
+        public forceAvrcpVolMuteSyncDelayCached : boolean = false;
+        public enableRoleMismatchReconnectMediaCached : boolean = false;
+        public enablePktSzMismatchReconnectMediaCached : boolean = false;
+        public enableHfpCached : boolean = false;
+
+        constructor(
+            uuid : string,
+            cb : ( obj : {} ) => void,
+            events : Events
+        )
+        {
+            super(uuid, 'AT+DCQ=', "\\+DCQ\\:(.+),(.+)", cb, events);
+        }
+
+        match(matchAry : any[]) 
+        {
+            var key = +matchAry[1];
+            var val;
+
+            switch( key )
+            {
+                case 1: // Enable Dual Stream
+                {
+                    this.enableDualStream = +matchAry[2] == 0 ?false :true;
+                    this.enableDualStreamCached = true;
+                    val = this.enableDualStream;
+                    break;
+                }
+                case 2: // Auto Reconnect 2nd Device
+                {
+                    this.autoReconnect2ndDevice = +matchAry[2] == 0 ?false :true;
+                    this.autoReconnect2ndDeviceCached = true;
+                    val = this.autoReconnect2ndDevice;
+                    break;
+                }
+                case 3: // Force AVRCP Volume and Mute Sync
+                {
+                    this.forceAvrcpVolMuteSync = +matchAry[2] == 0 ?false :true;
+                    this.forceAvrcpVolMuteSyncCached = true;
+                    val = this.forceAvrcpVolMuteSync;
+                    break;
+                }
+                case 4: // Force AVRCP Volume and Mute Sync Delay
+                {
+                    this.forceAvrcpVolMuteSyncDelay = +matchAry[2];
+                    this.forceAvrcpVolMuteSyncDelayCached = true;
+                    val = this.forceAvrcpVolMuteSyncDelay;
+                    break;
+                }
+                case 5: // Enable Role Mismatch Reconnect Media
+                {
+                    this.enableRoleMismatchReconnectMedia = +matchAry[2] == 0 ?false :true;
+                    this.enableRoleMismatchReconnectMediaCached = true;
+                    val = this.enableRoleMismatchReconnectMedia;
+                    break;
+                }
+                case 6: // Enable Packet Size Mismatch Reconnect Media
+                {
+                    this.enablePktSzMismatchReconnectMedia = +matchAry[2] == 0 ?false :true;
+                    this.enablePktSzMismatchReconnectMediaCached = true;
+                    val = this.enablePktSzMismatchReconnectMedia;
+                    break;
+                }
+                case 7: // Enable HFP
+                {
+                    this.enableHfp = +matchAry[2] == 0 ?false :true;
+                    this.enableHfpCached = true;
+                    val = this.enableHfp;
+                    break;
+                }
+                default:
+                {
+                    // Unknown key - ignore
+                    return;
+                }
+            }
+
+            this.params = 
+            {
+                "cmdRsp" : "+DCQ:",
+                "uuid" : this.uuid,
+                "seqId" : this.seqId,
+                "retCode" : 0,
+                "status" : "success",
+                "key" : val 
+            }
+
+            // Always put this to last
+            super.match(matchAry);
+        }
+    }
+
 
     //
     // Register subclass with base class

@@ -527,7 +527,7 @@ export class DeviceSrcPage
 
   navToSettingsPage()
   {
-    //this.navCtrl.push('SettingsPage', {'atCmdHandler' : this.qccSrcHandler}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
+    this.navCtrl.push('SettingsSrcPage', {'atCmdHandler' : this.qccSrcHandler}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
   }
 
 

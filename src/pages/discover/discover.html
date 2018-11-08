@@ -18,7 +18,7 @@
       <ion-item (click)="connectDevice(item, devInfo)">
           <h2>{{devInfo.name}}</h2>
           <h4>{{devInfo.uuid}}</h4>
-          <ion-icon name="bluetooth"  *ngIf="devInfo.isConnected()" item-end></ion-icon>
+          <ion-icon name="bluetooth" color="primary" *ngIf="devInfo.isConnected()" item-end></ion-icon>
         </ion-item>
       <ion-item-options>
           <button ion-button *ngIf="!devInfo.isConnected()" color="primary" (click)="connectDevice(item, devInfo)">
