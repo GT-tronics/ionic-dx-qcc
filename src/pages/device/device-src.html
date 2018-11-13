@@ -39,26 +39,34 @@
             </button>
         </ion-col> -->
     </ion-row>
-    <ion-toolbar>
-        <ion-range [(ngModel)]="volumeLevel" color="danger" pin="true" min="0" max="16" step="1" debounce="100" (ionBlur)="volumeSliderTouchUp()" (ionChange)="volumeSliderChanged($event)">
+    <!-- <ion-toolbar>
+        <ion-range [(ngModel)]="pdlRecs[0].avrcpVolume" color="danger" pin="true" min="0" max="127" step="1" debounce="100" (ionBlur)="volumeSliderTouchUp(0)" (ionChange)="volumeSliderChanged($event, 0)">
             <ion-icon range-left name="volume-down"></ion-icon>
             <ion-icon range-right name="volume-up"></ion-icon>      
         </ion-range>
     </ion-toolbar>
+    <ion-toolbar>
+        <ion-range [(ngModel)]="pdlRecs[1].avrcpVolume" color="danger" pin="true" min="0" max="127" step="1" debounce="100" (ionBlur)="volumeSliderTouchUp(0)" (ionChange)="volumeSliderChanged($event, 0)">
+            <ion-icon range-left name="volume-down"></ion-icon>
+            <ion-icon range-right name="volume-up"></ion-icon>      
+        </ion-range>
+    </ion-toolbar> -->
     <ion-list>
-        <ion-item-sliding *ngFor="let pdlRec of pdlRecs" #item>
-   
+        <ion-item-sliding *ngFor="let pdlRec of pdlRecs; let i = index" #item>
             <ion-item (click)="connectPdl(item, pdlRec)">
                 <ion-icon name="musical-notes" color="primary" *ngIf="pdlRec.isMusicProvisioned && pdlRec.isMusicConnected" item-start></ion-icon>
                 <ion-icon name="musical-notes" *ngIf="pdlRec.isMusicProvisioned && !pdlRec.isMusicConnected" item-start></ion-icon>
                 <ion-icon name="call" color="primary" *ngIf="pdlRec.isPhoneProvisioned && pdlRec.isPhoneConnected" item-start></ion-icon>
                 <ion-icon name="call" *ngIf="pdlRec.isPhoneProvisioned && !pdlRec.isPhoneConnected" item-start></ion-icon>
-                <h2>{{pdlRec.remoteDevName}}</h2>
-                <h4>{{pdlRec.addr}}</h4>
-                <ion-icon name="bluetooth" color="primary" *ngIf="pdlRec.isMusicConnected || pdlRec.isPhoneConnected" item-end></ion-icon>
-                <!-- <ion-note *ngIf="pdlRec.isMusicConnected" item-end>{{pdlRec.rssi}}dBm</ion-note> -->
+                <ion-label stacked class="dev-name-label">{{pdlRec.remoteDevName}}</ion-label>
+                <ion-label stacked class="dev-addr-label">{{pdlRec.addr}}</ion-label>
+                <ion-range *ngIf="pdlRec.isMusicConnected" [(ngModel)]="pdlRec.avrcpVolume" color="danger" pin="true" min="0" max="127" step="1" debounce="100" (ionFocus)="volumeSliderTouchDown($event,i)" (ionBlur)="volumeSliderTouchUp($event,i)" (ionChange)="volumeSliderChanged($event,i)">
+                    <ion-icon range-left name="volume-down"></ion-icon>
+                    <ion-icon range-right name="volume-up"></ion-icon>      
+                </ion-range>
+                <!-- <ion-icon name="bluetooth" color="primary" *ngIf="pdlRec.isMusicConnected || pdlRec.isPhoneConnected" item-end></ion-icon> -->
+                <!-- <ion-note *ngIf="pdlRec.isMusicConnected" item-end>{{pdlRec.rssi}}dBm</ion-note> -->        
             </ion-item>
-  
             <ion-item-options>
                 <button ion-button *ngIf="!pdlRec.isMusicConnected && !pdlRec.isPhoneConnected" color="primary" (click)="connectPdl(item, pdlRec)">
                     <ion-icon name="bluetooth"></ion-icon>

@@ -1,5 +1,9 @@
 # Release Notes for Ionic DataExchanger QCC 
 
+## R 0.8.4
+* fixed volume sync issues - for the both QCC source and sink
+* QCC source is now supporing mult-devices AVRCP volume change and sync.
+
 ## R 0.8.3
 * replaced the providers directory with the git submodule of https://github.com/GT-tronics/ionic-dx-providers
     * so we can share the same provider with other projects

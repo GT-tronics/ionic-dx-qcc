@@ -576,19 +576,23 @@ export class DeviceSnkPage
   {
     console.log("[DEVICE_SNK] volume slider changed[" + this.devInfo.uuid + "][" + this.devInfo.name + "]");
 
-    if( !this.getHandler() )
+    if( this.isVolumeSliderTouchDown )
     {
-      return;
+      this.qccSnkHandler.setVolume(this.volumeLevel);
     }
-
-    this.isVolumeSliderTouchDown = true;
-    this.qccSnkHandler.setVolume(this.volumeLevel);
   }
 
-  volumeSliderTouchDown()
+  volumeSliderTouchDown(event)
   {
     console.log("[DEVICE_SNK] volume slider touch down [" + this.devInfo.uuid + "][" + this.devInfo.name + "]");
+    this.isVolumeSliderTouchDown = true;
+  }
+
+  volumeSliderTouchUp(event)
+  {
+    console.log("[DEVICE_SNK] volume slider touch up [" + this.devInfo.uuid + "][" + this.devInfo.name + "]");
     this.isVolumeSliderTouchDown = false;
+    this.qccSnkHandler.setVolume(this.volumeLevel);
   }
 
   navToSettingsPage()

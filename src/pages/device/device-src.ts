@@ -22,8 +22,6 @@ export class DeviceSrcPage
   public logButtonColor : string = "secondary";
   public logButtonTitle : string = "Start Logging";
 
-  public volumeLevel : number = 0.0;
-  public volumeGuardTimeout : any = null;
   public isVolumeSliderTouchDown : boolean = false;
 
   protected qccSrcHandler : ATCMDHDLQCCSRC.AtCmdHandler_QCC_SRC = null;
@@ -105,25 +103,41 @@ export class DeviceSrcPage
       this.pairingButtonColor = this.deviceState == 'INQUIRING' ?"danger" :"dark";
 
       // Request volume
-      this.qccSrcHandler.getVolume(refresh).then( retVol => {
-        console.log("[DEVICE-SRC] get volume success [" + retVol + "]");
+      this.qccSrcHandler.getVolume(0, refresh).then( retVol => {
+        console.log("[DEVICE-SRC] get volume 1 success [" + retVol + "]");
         this.zone.run( () => {
-          this.volumeLevel = retVol;
+          if( retVol >= 0 && retVol < 128 )
+          {
+            this.pdlRecs[0].avrcpVolume = retVol;
+          }
         });
                 
-        // Request PDL
-        this.qccSrcHandler.getPdl(refresh).then( retPdl => {
-          console.log("[DEVICE-SRC] get PDL success " + JSON.stringify(retPdl));
+        this.qccSrcHandler.getVolume(1, refresh).then( retVol => {
+          console.log("[DEVICE-SRC] get volume 2 success [" + retVol + "]");
           this.zone.run( () => {
-            this.pdlRecs = retPdl.pdl;
+            if( retVol >= 0 && retVol < 128 )
+            {
+              this.pdlRecs[1].avrcpVolume = retVol;
+            }
+          });
+                  
+          // Request PDL
+          this.qccSrcHandler.getPdl(refresh).then( retPdl => {
+            console.log("[DEVICE-SRC] get PDL success " + JSON.stringify(retPdl));
+            this.zone.run( () => {
+              this.pdlRecs = retPdl.pdl;
+            });
+
+          }).catch( obj => {
+              console.log("[DEVICE-SRC] get PDL fail " + JSON.stringify(obj));
           });
 
         }).catch( obj => {
-            console.log("[DEVICE-SRC] get PDL fail " + JSON.stringify(obj));
+          console.log("[DEVICE-SRC] get volume 2 fail " + JSON.stringify(obj));
         });
 
       }).catch( obj => {
-        console.log("[DEVICE-SRC] get volume fail " + JSON.stringify(obj));
+        console.log("[DEVICE-SRC] get volume 1 fail " + JSON.stringify(obj));
       });   
 
     }
@@ -193,13 +207,14 @@ export class DeviceSrcPage
 
   private handleVolumeChanged(params)
   {
+    console.log('[DEVICE-SRC] volume changed: ' + params.volume);
     if( this.isVolumeSliderTouchDown )
     {
       return;
     }
 
     this.zone.run( () => {
-      this.volumeLevel = params.volume;
+      this.pdlRecs[params.pdlIdx].avrcpVolume = params.volume;
       console.log('[DEVICE-SRC] volume changed: ' + params.volume);
     });
   }
@@ -313,13 +328,27 @@ export class DeviceSrcPage
       return;
     }
 
-    this.qccSrcHandler.getVolume().then( ret => {
-      console.log("[DEVICE-SRC] get volume success [" + ret + "] " + JSON.stringify(ret));
+    this.qccSrcHandler.getVolume(0).then( retVol => {
+      console.log("[DEVICE-SRC] get volume 1 success [" + retVol + "]");
       this.zone.run(() => {
-        this.volumeLevel = ret;
+        if( retVol >= 0 && retVol < 128 )
+        {
+          this.pdlRecs[0].avrcpVolume = retVol;
+        }
       });
-    }).catch( ret => {
-      console.log("[DEVICE-SRC] get volume fail " + JSON.stringify(ret));
+      this.qccSrcHandler.getVolume(1).then( retVol => {
+        console.log("[DEVICE-SRC] get volume 2 success [" + retVol + "]");
+        this.zone.run(() => {
+          if( retVol >= 0 && retVol < 128 )
+          {
+            this.pdlRecs[1].avrcpVolume = retVol;
+          }
+        });
+      }).catch( obj => {
+        console.log("[DEVICE-SRC] get volume 2 fail " + JSON.stringify(obj));
+      });
+    }).catch( obj => {
+      console.log("[DEVICE-SRC] get volume 1 fail " + JSON.stringify(obj));
     });
   }
   
@@ -505,24 +534,27 @@ export class DeviceSrcPage
     this.navCtrl.push('AtCmdLogPage', {'atCmdHandler' : this.qccSrcHandler}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
   }
 
-  volumeSliderChanged(event)
+  volumeSliderChanged(event, pdlIdx)
   {
     console.log("[DEVICE_SRC] volume slider changed[" + this.devInfo.uuid + "][" + this.devInfo.name + "]");
 
-    if( !this.getHandler() )
+    if( this.isVolumeSliderTouchDown )
     {
-      return;
+      this.qccSrcHandler.setVolume(pdlIdx, this.pdlRecs[pdlIdx].avrcpVolume);
     }
-
-    this.isVolumeSliderTouchDown = true;
-    this.qccSrcHandler.setVolume(this.volumeLevel);
   }
 
-  volumeSliderTouchUp()
+  volumeSliderTouchDown(event, pdlIdx)
   {
     console.log("[DEVICE_SRC] volume slider touch down [" + this.devInfo.uuid + "][" + this.devInfo.name + "]");
+    this.isVolumeSliderTouchDown = true;
+  }
+  
+  volumeSliderTouchUp(event, pdlIdx)
+  {
+    console.log("[DEVICE_SRC] volume slider touch up [" + this.devInfo.uuid + "][" + this.devInfo.name + "]");
     this.isVolumeSliderTouchDown = false;
-    this.qccSrcHandler.setVolume(this.volumeLevel);
+    this.qccSrcHandler.setVolume(pdlIdx, this.pdlRecs[pdlIdx].avrcpVolume);
   }
 
   navToSettingsPage()

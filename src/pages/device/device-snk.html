@@ -40,7 +40,7 @@
         </ion-col>
     </ion-row>
     <ion-toolbar>
-        <ion-range [(ngModel)]="volumeLevel" color="danger" pin="true" min="0" max="1000" step="50" debounce="100" (ionBlur)="volumeSliderTouchDown()" (ionChange)="volumeSliderChanged($event)">
+        <ion-range [(ngModel)]="volumeLevel" color="danger" pin="true" min="0" max="1000" step="50" debounce="100" (ionFocus)="volumeSliderTouchDown($event)" (ionBlur)="volumeSliderTouchUp($event)" (ionChange)="volumeSliderChanged($event)">
             <ion-icon range-left name="volume-down"></ion-icon>
             <ion-icon range-right name="volume-up"></ion-icon>      
         </ion-range>

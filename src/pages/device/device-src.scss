@@ -1,3 +1,11 @@
 page-device {
-
+    .item {
+        min-height: 7rem; /* <- this can be whatever you need */
+    }
+    .dev-name-label {
+        font-size: 3em;
+    }
+    .dev-addr-label {
+        font-size: 1em;
+    }
 }
