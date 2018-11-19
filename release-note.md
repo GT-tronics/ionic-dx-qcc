@@ -1,5 +1,9 @@
 # Release Notes for Ionic DataExchanger QCC 
 
+## R 0.8.5
+* support SPP provision in AT+PDL?
+* added phone icon for SPP paired deviced in PDL
+
 ## R 0.8.4
 * fixed volume sync issues - for the both QCC source and sink
 * QCC source is now supporing mult-devices AVRCP volume change and sync.
