@@ -58,6 +58,7 @@
                 <ion-icon name="musical-notes" *ngIf="pdlRec.isMusicProvisioned && !pdlRec.isMusicConnected" item-start></ion-icon>
                 <ion-icon name="call" color="primary" *ngIf="pdlRec.isPhoneProvisioned && pdlRec.isPhoneConnected" item-start></ion-icon>
                 <ion-icon name="call" *ngIf="pdlRec.isPhoneProvisioned && !pdlRec.isPhoneConnected" item-start></ion-icon>
+                <ion-icon name="phone-portrait" *ngIf="pdlRec.isSppProvisioned" item-start></ion-icon>
                 <ion-label stacked class="dev-name-label">{{pdlRec.remoteDevName}}</ion-label>
                 <ion-label stacked class="dev-addr-label">{{pdlRec.addr}}</ion-label>
                 <ion-range *ngIf="pdlRec.isMusicConnected" [(ngModel)]="pdlRec.avrcpVolume" color="danger" pin="true" min="0" max="127" step="1" debounce="100" (ionFocus)="volumeSliderTouchDown($event,i)" (ionBlur)="volumeSliderTouchUp($event,i)" (ionChange)="volumeSliderChanged($event,i)">
