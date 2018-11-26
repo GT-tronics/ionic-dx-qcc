@@ -1,5 +1,8 @@
 # Release Notes for Ionic DataExchanger QCC 
 
+## R 0.8.6
+* added a new doc page to describe how to add new AT command handling in command handler.
+
 ## R 0.8.5
 * support SPP provision in AT+PDL?
 * added phone icon for SPP paired deviced in PDL
