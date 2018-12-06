@@ -20,7 +20,8 @@
     <h4>{{devInfo.name}}:{{devInfo.uuid}}</h4>
     <p>{{deviceState}}</p>
     <p>{{streamState}}</p>
-    <button ion-button full (click)="pairingButtonPressed($event)" color="{{pairingButtonColor}}">Pairing</button>
+    <button ion-button full (click)="pairButtonPressed($event)" color="{{pairButtonColor}}">Pair</button>
+    <button ion-button full (click)="navToScanPage()">Scan</button>
     <!-- <button ion-button full (click)="playPauseButtonPressed($event)" color="{{playPauseButtonColor}}">{{playPauseButtonTitle}}</button> -->
     <ion-row center>
         <!-- <ion-col center>

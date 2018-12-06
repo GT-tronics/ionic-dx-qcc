@@ -18,7 +18,8 @@ export class DiscoverPage
   linkedDevInfos : BtDeviceInfo[];
   connectingDevInfos : { uuid : string, BtDeviceInfo };
   connectedPageNames : { uuid : string, string };
-
+  pullToScanMsg : string = "Pull down to scan";
+  
   connectingPrompt : any = null;
 
   constructor(
@@ -164,9 +165,15 @@ export class DiscoverPage
     setTimeout(() => {
       this.dispatcher.stopScan();
       refresher.complete();
-    }, 3000);
+      this.zone.run(() => {
+        this.pullToScanMsg = "Pull down to scan";
+      });    }, 3000);
 
-    this.dispatcher.startScan(
+      this.zone.run(() => {
+        this.pullToScanMsg = "Scanning ...";
+      });
+      
+      this.dispatcher.startScan(
       successObj => {
         //console.log("[HOME] scan success " + JSON.stringify(successObj));
 

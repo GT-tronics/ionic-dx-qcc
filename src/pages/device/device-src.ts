@@ -18,7 +18,7 @@ export class DeviceSrcPage
   protected streamState : string = "STOP";
   protected isRefresh : boolean = true;
 
-  public pairingButtonColor : string = "dark";
+  public pairButtonColor : string = "dark";
   public logButtonColor : string = "secondary";
   public logButtonTitle : string = "Start Logging";
 
@@ -37,6 +37,8 @@ export class DeviceSrcPage
     public dispatcher : AtCmdDispatcherService,
     public events: Events
   ) {
+      console.log("[DEVICE-SRC] page start ...");
+
       this.devInfo = this.navParams.get('devInfo');
       var refreshPdl : boolean = this.navParams.get('refreshPdl');
 
@@ -100,7 +102,7 @@ export class DeviceSrcPage
     {
       var state = this.qccSrcHandler.atCmdDS.deviceState
       this.deviceState = this.qccSrcHandler.atCmdDS.deviceStateStrs[state];
-      this.pairingButtonColor = this.deviceState == 'INQUIRING' ?"danger" :"dark";
+      this.pairButtonColor = this.deviceState == 'INQUIRING' ?"danger" :"dark";
 
       // Request volume
       this.qccSrcHandler.getVolume(0, refresh).then( retVol => {
@@ -170,7 +172,7 @@ export class DeviceSrcPage
 
     this.zone.run( () => {
       this.deviceState = params.state;
-      this.pairingButtonColor = this.deviceState == 'INQUIRING' ?"danger" :"dark";
+      this.pairButtonColor = this.deviceState == 'INQUIRING' ?"danger" :"dark";
       // var ary = this.qccSrcHandler.getPdlImmediate();
       // if( ary == null )
       // {
@@ -352,9 +354,9 @@ export class DeviceSrcPage
     });
   }
   
-  pairingButtonPressed(event)
+  pairButtonPressed(event)
   {
-    console.log("[DEVICE-SRC] change pairing [" + this.devInfo.uuid + "][" + this.devInfo.name + "]");
+    console.log("[DEVICE-SRC] change pair [" + this.devInfo.uuid + "][" + this.devInfo.name + "]");
 
     if( !this.getHandler() )
     {
@@ -362,24 +364,24 @@ export class DeviceSrcPage
     }
     
     var onOff = true;
-    if( this.pairingButtonColor != 'dark' )
+    if( this.pairButtonColor != 'dark' )
     {
       onOff = false;
     }
     this.qccSrcHandler .setPairingOnOff(onOff).then( ret => {
-      console.log("[DEVICE-SRC] change pairing success " + JSON.stringify(ret));
+      console.log("[DEVICE-SRC] change pair success " + JSON.stringify(ret));
       this.zone.run( () => {
-        if( this.pairingButtonColor == 'dark' )
+        if( this.pairButtonColor == 'dark' )
         {
-          this.pairingButtonColor = 'danger';
+          this.pairButtonColor = 'danger';
         }
         else
         {
-          this.pairingButtonColor = 'dark';
+          this.pairButtonColor = 'dark';
         }
       });
     }).catch( ret => {
-      console.log("[DEVICE-SRC] change pairing fail " + JSON.stringify(ret));
+      console.log("[DEVICE-SRC] change pair fail " + JSON.stringify(ret));
     });;
   }
 
@@ -406,7 +408,7 @@ export class DeviceSrcPage
     connectingPrompt.present();
 
     console.log("[DEVICE-SRC] Connenting PDL [" + pdlRec.addr + "]");
-    this.qccSrcHandler.connectDevice(pdlRec.addr).then( ret => {
+    this.qccSrcHandler.connectPairedDevice(pdlRec.addr).then( ret => {
       console.log("[DEVICE-SRC] connect PDL success " + JSON.stringify(ret));
       connectingPrompt.dismiss();
       this.qccSrcHandler.refreshPdl();        
@@ -532,6 +534,11 @@ export class DeviceSrcPage
   navToLogPage()
   {
     this.navCtrl.push('AtCmdLogPage', {'atCmdHandler' : this.qccSrcHandler}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
+  }
+
+  navToScanPage()
+  {
+    this.navCtrl.push('ScanAndConnectPage', {'atCmdHandler' : this.qccSrcHandler}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
   }
 
   volumeSliderChanged(event, pdlIdx)

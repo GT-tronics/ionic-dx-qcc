@@ -5,9 +5,9 @@
 </ion-header>
   
 <ion-content>
-
+  <ion-label text-center>{{pullToScanMsg}}</ion-label>
   <ion-refresher (ionRefresh)="scanRefresh($event)" (ionPull)="scanPull($event)">
-    <ion-refresher-content pullingText="Pull to scan" refreshingText="Scanning ...">
+    <ion-refresher-content pullingText="" refreshingText="">
     </ion-refresher-content>
   </ion-refresher>
   <ion-list>

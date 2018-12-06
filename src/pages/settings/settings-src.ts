@@ -42,6 +42,8 @@ export class SettingsSrcPage {
     public events: Events
   ) 
   {
+    console.log("[SETTINGS] page start ...");
+
     this.atCmdHandler = <ATCMDHDLQCCSRC.AtCmdHandler_QCC_SRC>this.navParams.get('atCmdHandler');
 
     // Register for android's system back button

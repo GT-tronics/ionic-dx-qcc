@@ -27,6 +27,8 @@ export class AtCmdLogPage {
     public events: Events
   ) 
   {
+    console.log("[ATCMDLOG] page start ...");
+
     this.atCmdHandler = <ATCMDHDL.AtCmdHandler_TEXTBASE>this.navParams.get('atCmdHandler');
 
     // Register for android's system back button

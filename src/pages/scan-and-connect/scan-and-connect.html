@@ -1,0 +1,38 @@
+<!--
+  Generated template for the ScanAndConnectPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>SCAN</ion-title>
+</ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-label text-center>{{pullToScanMsg}}</ion-label>
+  <ion-refresher (ionRefresh)="scanRefresh($event)" (ionPull)="scanPulling($event)" (ionStart)="scanPullStart($event)">
+      <ion-refresher-content pullingText="" refreshingText="">
+      </ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <ion-item-sliding *ngFor="let scanRec of scanRecAry; let i = index" #item>
+      <ion-item (click)="connectDevice(item, scanRec.addr)">
+        <ion-icon name="musical-notes" color="dark" *ngIf="scanRec.isA2dp" item-start></ion-icon>
+        <ion-icon name="musical-notes" color="light" *ngIf="!scanRec.isA2dp" item-start></ion-icon>
+        <ion-icon name="call" color="dark" *ngIf="scanRec.isHfp" item-start></ion-icon>
+        <ion-icon name="call" color="light" *ngIf="!scanRec.isHfp" item-start></ion-icon>
+        <h2>{{scanRec.remoteDevName}}</h2>
+        <h4>{{scanRec.addr}}</h4>
+        <!-- <ion-label>{{scanRec.remoteDevName}}</ion-label>
+        <ion-label>{{scanRec.addr}}</ion-label> -->
+        <!-- <ion-icon name="bluetooth" item-end></ion-icon> -->
+        <ion-note item-end>-{{scanRec.pathLoss}}dBm</ion-note>        
+      </ion-item>
+    </ion-item-sliding>
+  </ion-list>    
+</ion-content>
