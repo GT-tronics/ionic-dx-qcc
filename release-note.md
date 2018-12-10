@@ -1,5 +1,9 @@
 # Release Notes for Ionic DataExchanger QCC 
 
+## R 0.8.7
+* added a scan-and-connect page to support separated audio device scan and connect in QCC_SRC
+* improved the scanning message in Discover page
+
 ## R 0.8.6
 * added a new doc page to describe how to add new AT command handling in command handler.
 
