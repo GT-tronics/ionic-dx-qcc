@@ -1,5 +1,8 @@
 # Release Notes for Ionic DataExchanger QCC 
 
+## R 0.8.8
+* improved the robustness of data exchanger stack - see [IonicDxProvider's release note](https://github.com/GT-tronics/ionic-dx-providers)
+
 ## R 0.8.7
 * added a scan-and-connect page to support separated audio device scan and connect in QCC_SRC
 * improved the scanning message in Discover page
