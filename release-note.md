@@ -1,5 +1,9 @@
 # Release Notes for Ionic DataExchanger QCC 
 
+## R 0.8.10
+* added a show 3d page using BabylonJS
+* added BabylonJS provider
+
 ## R 0.8.9
 * minor changes in scan-and-connect page
 * fixed with the correct version of data-exchanger.service.ts
