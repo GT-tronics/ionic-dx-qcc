@@ -600,4 +600,9 @@ export class DeviceSnkPage
     this.navCtrl.push('SettingsSnkPage', {'atCmdHandler' : this.qccSnkHandler}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
   }
 
+  navToShow3dPage()
+  {
+    this.navCtrl.push('Show3dPage', {'atCmdHandler' : this.qccSnkHandler}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
+  }
+
 }

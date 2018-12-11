@@ -20,6 +20,7 @@ import { HTTP } from '@ionic-native/http';
 
 import { DataExchangerService } from '../providers/data-exchanger/data-exchanger.service';
 import { AtCmdDispatcherService } from '../providers/atcmd-dispatcher/atcmd-dispatcher.service';
+import { BabylonjsProvider } from '../providers/babylonjs/babylonjs';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { AtCmdDispatcherService } from '../providers/atcmd-dispatcher/atcmd-disp
     SplashScreen,
     DataExchangerService,
     AtCmdDispatcherService,
+    BabylonjsProvider,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     HTTP
   ]
