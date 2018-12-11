@@ -1,5 +1,9 @@
 # Release Notes for Ionic DataExchanger QCC 
 
+## R 0.8.9
+* minor changes in scan-and-connect page
+* fixed with the correct version of data-exchanger.service.ts
+
 ## R 0.8.8
 * improved the robustness of data exchanger stack - see [IonicDxProvider's release note](https://github.com/GT-tronics/ionic-dx-providers)
 

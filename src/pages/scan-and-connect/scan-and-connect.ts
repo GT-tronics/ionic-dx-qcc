@@ -27,6 +27,9 @@ export class ScanAndConnectPage
 
   private msgPrompt : any = null;
   private connecting : boolean = false;
+  private scanning : boolean = false;
+
+  protected refresher : any = null;
 
   constructor(
     public platform: Platform,
@@ -100,6 +103,11 @@ export class ScanAndConnectPage
   {
     console.log('[SCAN-AND-CONNECT] new scan result: ' + JSON.stringify(params));
 
+    if( !this.scanning )
+    {
+      return;
+    }
+    
     this.zone.run(() => {
       for( var i = 0; i < this.scanRecAry.length; i++)
       {
@@ -192,34 +200,25 @@ export class ScanAndConnectPage
       //   });
       // }
   
-      //this.msgPrompt.dismiss();
       refresher.complete();
+      this.scanning = false;
+      this.refresher = null;
+
       this.zone.run(() => {
         this.pullToScanMsg = "Pull Down To Scan";
       });
     }).catch( ret => {
       console.log("[SCAN-AND-CONNECT] scanning fail " + JSON.stringify(ret));
-      //this.msgPrompt.dismiss();
+
       refresher.complete();
+      this.scanning = false;
+      this.refresher = null;
+
       this.zone.run(() => {
         this.pullToScanMsg = "Pull Down To Scan";
       });
     });
   
-  }
-
-  refreshButtonPressed()
-  {
-    this.zone.run(() => {
-      this.scanRecAry = [];
-    });
-
-    this.startScan();
-
-    this.msgPrompt = this.alertCtrl.create({
-      title: 'Scanning'
-    });
-    this.msgPrompt.present();
   }
 
   scanPullStart(refresher)
@@ -237,6 +236,8 @@ export class ScanAndConnectPage
       this.pullToScanMsg = "Scanning ...";
     });
 
+    this.refresher = refresher;
+    this.scanning = true;
     this.startScan(refresher);
   }
 
@@ -246,7 +247,17 @@ export class ScanAndConnectPage
       title: 'Connecting'
     });
     this.msgPrompt.present();
+    
     this.connecting = true;
+    if( this.scanning )
+    {
+      if( this.refresher )
+      {
+        this.refresher.complete();
+        this.refresher = null;
+      }
+      this.scanning = false;
+    }
 
     this.atCmdHandler.connectDevice(addr).then( ret => {
       console.log("[SCAN-AND-CONNECT] connecting success " + JSON.stringify(ret));
