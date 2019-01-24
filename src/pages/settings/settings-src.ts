@@ -27,6 +27,7 @@ export class SettingsSrcPage {
   public enableRoleMismatchReconnectMedia : boolean = false;
   public enablePktSzMismatchReconnectMedia : boolean = false;
   public enableHfp : boolean = false;
+  public enableHfpA2dpSwitchingViaButton : boolean = false;
 
   public codecFastStream : boolean = false;
   public codecAptX : boolean = false;
@@ -71,45 +72,51 @@ export class SettingsSrcPage {
     // Get all the settings parameters
     //
 
-    this.atCmdHandler.getEnableDualStream().then((ret) => {
+    // this.atCmdHandler.getEnableDualStream().then((ret) => {
+    //   this.zone.run(() => {
+    //     this.enableDualStream = ret;
+    //   });
+    // });
+
+    // this.atCmdHandler.getAutoReconnect2ndDevice().then((ret) => {
+    //   this.zone.run(() => {
+    //     this.autoReconnect2ndDevice = ret;
+    //   });
+    // });
+
+    // this.atCmdHandler.getForceAvrcpVolMuteSync().then((ret) => {
+    //   this.zone.run(() => {
+    //     this.forceAvrcpVolMuteSync = ret;
+    //   });
+    // });
+
+    // this.atCmdHandler.getForceAvrcpVolMuteSyncDelay().then((ret) => {
+    //   this.zone.run(() => {
+    //     this.forceAvrcpVolMuteSyncDelay = ret;
+    //   });
+    // });
+
+    // this.atCmdHandler.getEnableRoleMismatchReconnectMedia().then((ret) => {
+    //   this.zone.run(() => {
+    //     this.enableRoleMismatchReconnectMedia = ret;
+    //   });
+    // });
+
+    // this.atCmdHandler.getEnablePktSzMismatchReconnectMedia().then((ret) => {
+    //   this.zone.run(() => {
+    //     this.enablePktSzMismatchReconnectMedia = ret;
+    //   });
+    // });
+
+    this.atCmdHandler.getForceA2dpProfile().then((ret) => {
       this.zone.run(() => {
-        this.enableDualStream = ret;
+        this.enableHfp = !ret;
       });
     });
 
-    this.atCmdHandler.getAutoReconnect2ndDevice().then((ret) => {
+    this.atCmdHandler.getEnableHfpA2dpSwitchingViaButton().then((ret) => {
       this.zone.run(() => {
-        this.autoReconnect2ndDevice = ret;
-      });
-    });
-
-    this.atCmdHandler.getForceAvrcpVolMuteSync().then((ret) => {
-      this.zone.run(() => {
-        this.forceAvrcpVolMuteSync = ret;
-      });
-    });
-
-    this.atCmdHandler.getForceAvrcpVolMuteSyncDelay().then((ret) => {
-      this.zone.run(() => {
-        this.forceAvrcpVolMuteSyncDelay = ret;
-      });
-    });
-
-    this.atCmdHandler.getEnableRoleMismatchReconnectMedia().then((ret) => {
-      this.zone.run(() => {
-        this.enableRoleMismatchReconnectMedia = ret;
-      });
-    });
-
-    this.atCmdHandler.getEnablePktSzMismatchReconnectMedia().then((ret) => {
-      this.zone.run(() => {
-        this.enablePktSzMismatchReconnectMedia = ret;
-      });
-    });
-
-    this.atCmdHandler.getEnableHfp().then((ret) => {
-      this.zone.run(() => {
-        this.enableHfp = ret;
+        this.enableHfpA2dpSwitchingViaButton = ret;
       });
     });
 
@@ -144,39 +151,53 @@ export class SettingsSrcPage {
     }
   }
 
-  updateEnableDualStream()
-  {
-    this.atCmdHandler.setEnableDualStream(this.enableDualStream);
-  }
+  // updateEnableDualStream()
+  // {
+  //   this.atCmdHandler.setEnableDualStream(this.enableDualStream);
+  // }
 
-  updateAutoReconnect2ndDevice()
-  {
-    this.atCmdHandler.setAutoReconnect2ndDevice(this.autoReconnect2ndDevice);
-  }
+  // updateAutoReconnect2ndDevice()
+  // {
+  //   this.atCmdHandler.setAutoReconnect2ndDevice(this.autoReconnect2ndDevice);
+  // }
 
-  updateForceAvrcpVolMuteSync()
-  {
-    this.atCmdHandler.setForceAvrcpVolMuteSync(this.forceAvrcpVolMuteSync);
-  }
+  // updateForceAvrcpVolMuteSync()
+  // {
+  //   this.atCmdHandler.setForceAvrcpVolMuteSync(this.forceAvrcpVolMuteSync);
+  // }
 
-  updateForceAvrcpVolMuteSyncDelay()
-  {
-    this.atCmdHandler.setForceAvrcpVolMuteSyncDelay(this.forceAvrcpVolMuteSyncDelay);
-  }
+  // updateForceAvrcpVolMuteSyncDelay()
+  // {
+  //   this.atCmdHandler.setForceAvrcpVolMuteSyncDelay(this.forceAvrcpVolMuteSyncDelay);
+  // }
 
-  updateEnableRoleMismatchReconnectMedia()
-  {
-    this.atCmdHandler.setEnableRoleMismatchReconnectMedia(this.enableRoleMismatchReconnectMedia);
-  }
+  // updateEnableRoleMismatchReconnectMedia()
+  // {
+  //   this.atCmdHandler.setEnableRoleMismatchReconnectMedia(this.enableRoleMismatchReconnectMedia);
+  // }
 
-  updateEnablePktSzMismatchReconnectMedia()
-  {
-    this.atCmdHandler.setEnablePktSzMismatchReconnectMedia(this.enablePktSzMismatchReconnectMedia);
-  }
+  // updateEnablePktSzMismatchReconnectMedia()
+  // {
+  //   this.atCmdHandler.setEnablePktSzMismatchReconnectMedia(this.enablePktSzMismatchReconnectMedia);
+  // }
 
   updateEnableHfp()
   {
-    this.atCmdHandler.setEnableHfp(this.enableHfp);
+    this.atCmdHandler.setForceA2dpProfile(!this.enableHfp);
+    this.atCmdHandler.setEnableDualStream(!this.enableHfp);
+    if( this.enableHfp )
+    {
+      this.atCmdHandler.setSbcMaxBitPoolSize(53);
+    }
+    else
+    {
+      this.atCmdHandler.setSbcMaxBitPoolSize(30);
+    }
+  }
+
+  updateEnableHfpA2dpSwitchingViaButton()
+  {
+    this.atCmdHandler.setEnableHfpA2dpSwitchingViaButton(this.enableHfpA2dpSwitchingViaButton);
   }
 
   updateCodec()

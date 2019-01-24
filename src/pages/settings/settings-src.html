@@ -12,37 +12,41 @@
 
 <ion-content padding>
     <ion-item-group>
-        <ion-item-divider sticky color="dark">Connect/Pairing</ion-item-divider>
-        <ion-item>
+        <!-- <ion-item-divider sticky color="dark">Connect/Pairing</ion-item-divider> -->
+        <!-- <ion-item>
             <ion-label>Dual Stream</ion-label>
             <ion-toggle [(ngModel)]="enableDualStream" (ngModelChange)="updateEnableDualStream()"></ion-toggle>
-        </ion-item>
-        <ion-item>
+        </ion-item> -->
+        <!-- <ion-item>
             <ion-label>Auto-Reconnect 2nd Device</ion-label>
             <ion-toggle [(ngModel)]="autoReconnect2ndDevice" (ngModelChange)="updateAutoReconnect2ndDevice()"></ion-toggle>
-        </ion-item>
-        <ion-item-divider sticky color="dark">Compatibility</ion-item-divider>
-        <ion-item>
+        </ion-item> -->
+        <ion-item-divider sticky color="dark">Voice Back</ion-item-divider>
+        <!-- <ion-item>
             <ion-label>Volume and Mute Sync</ion-label>
             <ion-toggle [(ngModel)]="forceAvrcpVolMuteSync" (ngModelChange)="updateForceAvrcpVolMuteSync()"></ion-toggle>
-        </ion-item>
+        </ion-item> -->
         <!-- <ion-item>
             <ion-label>Volume and Mute Sync Delay(s)</ion-label>
             <ion-input text-right type="number" min=0 max=60 [(ngModel)]="forceAvrcpVolMuteSyncDelay" (ngModelChange)="updateForceAvrcpVolMuteSyncDelay()"></ion-input>
         </ion-item> -->
-        <ion-item>
+        <!-- <ion-item>
             <ion-label>Role Mismatch Reconfig</ion-label>
             <ion-toggle [(ngModel)]="enableRoleMismatchReconnectMedia" (ngModelChange)="updateEnableRoleMismatchReconnectMedia()"></ion-toggle>
         </ion-item>
         <ion-item>
             <ion-label>L2CAP Mismatch Reconfig</ion-label>
             <ion-toggle [(ngModel)]="enablePktSzMismatchReconnectMedia" (ngModelChange)="updateEnablePktSzMismatchReconnectMedia()"></ion-toggle>
-        </ion-item>
+        </ion-item> -->
         <ion-item>
-            <ion-label>HFP Profile</ion-label>
+            <ion-label>HFP (Voice Grade)</ion-label>
             <ion-toggle [(ngModel)]="enableHfp" (ngModelChange)="updateEnableHfp()"></ion-toggle>
         </ion-item>
-        <ion-item-divider sticky color="dark">Codec</ion-item-divider>
+        <ion-item>
+            <ion-label>HFP/A2DP Switching</ion-label>
+            <ion-toggle [(ngModel)]="enableHfpA2dpSwitchingViaButton" (ngModelChange)="updateEnableHfpA2dpSwitchingViaButton()"></ion-toggle>
+        </ion-item>
+        <ion-item-divider sticky color="dark">A2DP Codec</ion-item-divider>
         <ion-item>
             <ion-label>FASTSTREAM</ion-label>
             <ion-toggle [(ngModel)]="codecFastStream" (ngModelChange)="updateCodec()"></ion-toggle>

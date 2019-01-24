@@ -1,5 +1,8 @@
 # Release Notes for Ionic DataExchanger QCC 
 
+## R 0.8.11
+* cleaned up the QCC SRC setting page to support Voice Back and Codec setting
+
 ## R 0.8.10
 * added a show 3d page using BabylonJS
 * added BabylonJS provider
