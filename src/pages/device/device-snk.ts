@@ -3,6 +3,7 @@ import { Platform, Events, IonicPage } from 'ionic-angular';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AtCmdDispatcherService, BtDeviceInfo } from '../../providers/atcmd-dispatcher/atcmd-dispatcher.service';
 import { ATCMDHDLQCCSNK } from '../../providers/atcmd-dispatcher/atcmd-handler-qcc-sink';
+import { ATCMDHDLIMU } from '../../providers/atcmd-dispatcher/atcmd-handler-imu';
 
 @IonicPage()
 
@@ -28,7 +29,8 @@ export class DeviceSnkPage
   public volumeGuardTimeout : any = null;
   public isVolumeSliderTouchDown : boolean = false;
 
-  protected qccSnkHandler : ATCMDHDLQCCSNK.AtCmdHandler_QCC_SNK = null;
+  protected cmdChHandler : ATCMDHDLQCCSNK.AtCmdHandler_QCC_SNK = null;
+  protected dataChHandler : ATCMDHDLIMU.AtCmdHandler_IMU = null;
 
   private bindedFunctions : {};
 
@@ -48,8 +50,8 @@ export class DeviceSnkPage
 
       if( this.getHandler() )
       {
-        var state = this.qccSnkHandler.atCmdDS.deviceState
-        this.deviceState = this.qccSnkHandler.atCmdDS.deviceStateStrs[state];
+        var state = this.cmdChHandler.atCmdDS.deviceState
+        this.deviceState = this.cmdChHandler.atCmdDS.deviceStateStrs[state];
         this.pairingButtonColor = this.deviceState == 'DISCOVERABLE' ?"danger" :"dark";
 
         if( refreshPdl )
@@ -95,7 +97,7 @@ export class DeviceSnkPage
 
     // Refresh active devices' RSSI every 10s
     this.rssiTimer = setInterval(() => {
-      this.qccSnkHandler.refreshPdlRssi();        
+      this.cmdChHandler.refreshPdlRssi();        
     }, 10000);
   }
 
@@ -174,9 +176,9 @@ export class DeviceSnkPage
         this.deviceState = params.state;
         this.pairingButtonColor = this.deviceState == 'DISCOVERABLE' ?"danger" :"dark";
       // setTimeout(() => {
-      //   this.qccSnkHandler.refreshPdl();        
+      //   this.cmdChHandler.refreshPdl();        
       // },0);
-      // var ary = this.qccSnkHandler.getPdlImmediate();
+      // var ary = this.cmdChHandler.getPdlImmediate();
       // if( ary == null )
       // {
       //   this.pdlRecs = [];
@@ -188,7 +190,7 @@ export class DeviceSnkPage
     });
 
     // Update PDL since device state has changed
-    this.qccSnkHandler.refreshPdl();        
+    this.cmdChHandler.refreshPdl();        
   }
 
   private handleStreamStateChanged(params)
@@ -209,7 +211,7 @@ export class DeviceSnkPage
     });
 
     // Update PDL since device state has changed
-    this.qccSnkHandler.refreshPdl();    
+    this.cmdChHandler.refreshPdl();    
   }
 
   private handleVolumeChanged(params)
@@ -227,17 +229,18 @@ export class DeviceSnkPage
 
   private getHandler() : boolean
   {
-    if( this.qccSnkHandler == null )
+    if( this.cmdChHandler == null )
     {
-      // this.qccSnkHandler = <ATCMDHDLQCCSNK.AtCmdHandler_QCC_SNK>this.dispatcher.getCmdChHandler(linkedList[foundIdx].uuid);
-      this.qccSnkHandler = <ATCMDHDLQCCSNK.AtCmdHandler_QCC_SNK>this.dispatcher.getCmdChHandler(this.devInfo.uuid);
-    }
-    else
-    {
-      return true;
+      // this.cmdChHandler = <ATCMDHDLQCCSNK.AtCmdHandler_QCC_SNK>this.dispatcher.getCmdChHandler(linkedList[foundIdx].uuid);
+      this.cmdChHandler = <ATCMDHDLQCCSNK.AtCmdHandler_QCC_SNK>this.dispatcher.getCmdChHandler(this.devInfo.uuid);
     }
 
-    if( this.qccSnkHandler == null )
+    if( this.dataChHandler == null )
+    {
+      this.dataChHandler = <ATCMDHDLIMU.AtCmdHandler_IMU>this.dispatcher.getDataChHandler(this.devInfo.uuid);
+    }
+ 
+    if( this.cmdChHandler == null && this.dataChHandler == null )
     {
       // Handler is not any more
       // - likely the device is disconnected
@@ -293,7 +296,7 @@ export class DeviceSnkPage
       return;
     }
 
-    this.qccSnkHandler.refreshPdl().then( ret => {
+    this.cmdChHandler.refreshPdl().then( ret => {
       console.log("[DEVICE-SNK] refresh PDL success " + JSON.stringify(ret));
       //this.pdlRecs = ret.pdl;
     }).catch( ret => {
@@ -310,7 +313,7 @@ export class DeviceSnkPage
       return;
     }
 
-    this.qccSnkHandler.getDeviceState().then( ret => {
+    this.cmdChHandler.getDeviceState().then( ret => {
       console.log("[DEVICE-SNK] get device state success " + JSON.stringify(ret));
       this.zone.run(() => {
         this.deviceState = ret.state;
@@ -337,7 +340,7 @@ export class DeviceSnkPage
     {
       onOff = false;
     }
-    this.qccSnkHandler .setPairingOnOff(onOff).then( ret => {
+    this.cmdChHandler .setPairingOnOff(onOff).then( ret => {
       console.log("[DEVICE-SNK] change pairing success " + JSON.stringify(ret));
       this.zone.run( () => {
         if( this.pairingButtonColor == 'dark' )
@@ -378,7 +381,7 @@ export class DeviceSnkPage
     connectingPrompt.present();
 
     console.log("[DEVICE-SNK] Connenting PDL [" + pdlRec.addr + "]");
-    this.qccSnkHandler.connectDevice(pdlRec.addr).then( ret => {
+    this.cmdChHandler.connectDevice(pdlRec.addr).then( ret => {
       console.log("[DEVICE-SNK] connect PDL success " + JSON.stringify(ret));
       connectingPrompt.dismiss();
     }).catch( ret => {
@@ -417,7 +420,7 @@ export class DeviceSnkPage
     disconnectingPrompt.present();
     
     console.log("[DEVICE-SNK] Disconnecting device in PDL [" + pdlRec.addr + "]");
-    this.qccSnkHandler.disconnectDevice(pdlRec.addr).then( ret => {
+    this.cmdChHandler.disconnectDevice(pdlRec.addr).then( ret => {
       console.log("[DEVICE-SNK] disconnect device in PDL success " + JSON.stringify(ret));
       disconnectingPrompt.dismiss();
     }).catch( ret => {
@@ -451,10 +454,10 @@ export class DeviceSnkPage
     removingPrompt.present();
         
     console.log("[DEVICE-SNK] Removing device in PDL [" + pdlRec.addr + "]");
-    this.qccSnkHandler.removePDL(pdlRec.addr).then( ret => {
+    this.cmdChHandler.removePDL(pdlRec.addr).then( ret => {
       console.log("[DEVICE-SNK] remove device in PDL success " + JSON.stringify(ret));
       removingPrompt.dismiss();
-      this.qccSnkHandler.refreshPdl();
+      this.cmdChHandler.refreshPdl();
     }).catch( ret => {
       removingPrompt.dismiss();
       console.log("[DEVICE-SNK] remove device in PDL fail " + JSON.stringify(ret));
@@ -486,7 +489,7 @@ export class DeviceSnkPage
         this.logButtonTitle = 'End Logging';
       });
 
-      this.qccSnkHandler.startLogging();
+      this.cmdChHandler.startLogging();
     }
     else
     {
@@ -495,15 +498,9 @@ export class DeviceSnkPage
         this.logButtonTitle = 'Start Logging';
       });
 
-      this.qccSnkHandler.stopLogging();
+      this.cmdChHandler.stopLogging();
     }
   }
-
-  navToLogPage()
-  {
-    this.navCtrl.push('AtCmdLogPage', {'atCmdHandler' : this.qccSnkHandler}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
-  }
-
 
   playPauseButtonPressed(event)
   {
@@ -520,7 +517,7 @@ export class DeviceSnkPage
     //     this.playPauseButtonTitle = 'Pause';
     //   });
 
-    //   this.qccSnkHandler.setPlayState(1);
+    //   this.cmdChHandler.setPlayState(1);
     // }
     // else
     // {
@@ -528,7 +525,7 @@ export class DeviceSnkPage
     //     this.playPauseButtonTitle = 'Play';
     //   });
 
-    //   this.qccSnkHandler.setPlayState(0);
+    //   this.cmdChHandler.setPlayState(0);
     // }
 
     if( this.isPlaying )
@@ -536,14 +533,14 @@ export class DeviceSnkPage
       this.zone.run(() => {
         this.isPlaying = false;
       });
-      this.qccSnkHandler.setPlayState(0);
+      this.cmdChHandler.setPlayState(0);
   }
     else
     {
       this.zone.run(() => {
         this.isPlaying = true;
       });
-      this.qccSnkHandler.setPlayState(1);
+      this.cmdChHandler.setPlayState(1);
     }
 
   }
@@ -557,7 +554,7 @@ export class DeviceSnkPage
       return;
     }
 
-    this.qccSnkHandler.setAudioTrack(1);
+    this.cmdChHandler.setAudioTrack(1);
   }
 
   skipBackwardButtonPressed(event)
@@ -569,7 +566,7 @@ export class DeviceSnkPage
       return;
     }
 
-    this.qccSnkHandler.setAudioTrack(0);
+    this.cmdChHandler.setAudioTrack(0);
   }
 
   volumeSliderChanged(event)
@@ -578,7 +575,7 @@ export class DeviceSnkPage
 
     if( this.isVolumeSliderTouchDown )
     {
-      this.qccSnkHandler.setVolume(this.volumeLevel);
+      this.cmdChHandler.setVolume(this.volumeLevel);
     }
   }
 
@@ -592,17 +589,22 @@ export class DeviceSnkPage
   {
     console.log("[DEVICE_SNK] volume slider touch up [" + this.devInfo.uuid + "][" + this.devInfo.name + "]");
     this.isVolumeSliderTouchDown = false;
-    this.qccSnkHandler.setVolume(this.volumeLevel);
+    this.cmdChHandler.setVolume(this.volumeLevel);
+  }
+
+  navToLogPage()
+  {
+    this.navCtrl.push('AtCmdLogPage', {'cmdChHandler' : this.cmdChHandler, 'dataChHandler' : this.dataChHandler}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
   }
 
   navToSettingsPage()
   {
-    this.navCtrl.push('SettingsSnkPage', {'atCmdHandler' : this.qccSnkHandler}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
+    this.navCtrl.push('SettingsSnkPage', {'cmdChHandler' : this.cmdChHandler, 'dataChHandler' : this.dataChHandler}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
   }
 
   navToShow3dPage()
   {
-    this.navCtrl.push('Show3dPage', {'atCmdHandler' : this.qccSnkHandler}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
+    this.navCtrl.push('Show3dPage', {'cmdChHandler' : this.cmdChHandler, 'dataChHandler' : this.dataChHandler}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
   }
 
 }

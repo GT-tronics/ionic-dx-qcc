@@ -1,5 +1,9 @@
 # Release Notes for Ionic DataExchanger QCC 
 
+## IMU R1
+* branched from Master R 0.8.10
+* added IMU support
+
 ## R 0.8.10
 * added a show 3d page using BabylonJS
 * added BabylonJS provider

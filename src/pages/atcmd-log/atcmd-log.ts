@@ -16,7 +16,7 @@ import { ATCMDHDL } from '../../providers/atcmd-dispatcher/atcmd-handler';
 })
 export class AtCmdLogPage {
 
-  protected atCmdHandler : ATCMDHDL.AtCmdHandler_TEXTBASE = null;
+  protected cmdChHandler : ATCMDHDL.AtCmdHandler_TEXTBASE = null;
   private bindedFunctions : {};
 
   constructor
@@ -29,7 +29,7 @@ export class AtCmdLogPage {
   {
     console.log("[ATCMDLOG] page start ...");
 
-    this.atCmdHandler = <ATCMDHDL.AtCmdHandler_TEXTBASE>this.navParams.get('atCmdHandler');
+    this.cmdChHandler = <ATCMDHDL.AtCmdHandler_TEXTBASE>this.navParams.get('cmdChHandler');
 
     // Register for android's system back button
     let backAction =  platform.registerBackButtonAction(() => {

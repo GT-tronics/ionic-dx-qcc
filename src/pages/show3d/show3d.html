@@ -7,15 +7,18 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>show3d</ion-title>
+    <ion-title>show3d  {{timeDiff}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content>
-  <canvas id="surface" #surface ion-fixed></canvas>
+  <canvas id="surface" touch-action="none" #surface ion-fixed></canvas>
   <ion-fab bottom right>
-    <button ion-fab color="dark" transparent (tap)="rollEm($event)"><ion-icon name="refresh"></ion-icon></button>
+    <button ion-fab color={{gamEnableButtonColor}} transparent (tap)="gamEnableButtonPressed($event)">
+      <ion-icon name="refresh">
+      </ion-icon>
+    </button>
   </ion-fab>
 </ion-content>

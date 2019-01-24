@@ -16,7 +16,7 @@ import { ATCMDHDLQCCSNK } from '../../providers/atcmd-dispatcher/atcmd-handler-q
 })
 export class SettingsSnkPage {
 
-  protected atCmdHandler : ATCMDHDLQCCSNK.AtCmdHandler_QCC_SNK = null;
+  protected cmdChHandler : ATCMDHDLQCCSNK.AtCmdHandler_QCC_SNK = null;
   private bindedFunctions : {};
 
   public pwrOnConnect : boolean = true;
@@ -43,7 +43,7 @@ export class SettingsSnkPage {
     public events: Events
   ) 
   {
-    this.atCmdHandler = <ATCMDHDLQCCSNK.AtCmdHandler_QCC_SNK>this.navParams.get('atCmdHandler');
+    this.cmdChHandler = <ATCMDHDLQCCSNK.AtCmdHandler_QCC_SNK>this.navParams.get('cmdChHandler');
 
     // Register for android's system back button
     let backAction =  platform.registerBackButtonAction(() => {
@@ -70,61 +70,61 @@ export class SettingsSnkPage {
     // Get all the settings parameters
     //
 
-    this.atCmdHandler.getPowerOnConnect().then((pwrOnConnect) => {
+    this.cmdChHandler.getPowerOnConnect().then((pwrOnConnect) => {
       this.zone.run(() => {
         this.pwrOnConnect = pwrOnConnect;
       });
     });
 
-    this.atCmdHandler.getPowerOnPairing().then((pwrOnPairing) => {
+    this.cmdChHandler.getPowerOnPairing().then((pwrOnPairing) => {
       this.zone.run(() => {
         this.pwrOnPairing = pwrOnPairing;
       });
     });
 
-    this.atCmdHandler.getRemainOnPairing().then((remainOnPairing) => {
+    this.cmdChHandler.getRemainOnPairing().then((remainOnPairing) => {
       this.zone.run(() => {
         this.remainOnPairing = remainOnPairing;
       });
     });
 
-    this.atCmdHandler.getReconnectLastAttempt().then((reconnectLastAttempt) => {
+    this.cmdChHandler.getReconnectLastAttempt().then((reconnectLastAttempt) => {
       this.zone.run(() => {
         this.reconnectLastAttempt = reconnectLastAttempt;
       });
     });
 
-    this.atCmdHandler.getConnectAttemptRepeat().then((connectAttemptRepeat) => {
+    this.cmdChHandler.getConnectAttemptRepeat().then((connectAttemptRepeat) => {
       this.zone.run(() => {
         this.connectAttemptRepeat = connectAttemptRepeat;
       });
     });
 
-    this.atCmdHandler.getPairingTimeoutTo().then((pairingTimeoutTo) => {
+    this.cmdChHandler.getPairingTimeoutTo().then((pairingTimeoutTo) => {
       this.zone.run(() => {
         this.pairingTimeoutToIdle = (pairingTimeoutTo >= 1 ?true :false);
       });
     });
 
-    this.atCmdHandler.getConnectPolicy().then((connectPolicy) => {
+    this.cmdChHandler.getConnectPolicy().then((connectPolicy) => {
       this.zone.run(() => {
         this.connectPolicyLast = (connectPolicy == 0 ?true :false);
       });
     });
 
-    this.atCmdHandler.getTimerValue(4).then((obj) => {
+    this.cmdChHandler.getTimerValue(4).then((obj) => {
       this.zone.run(() => {
         this.pairingTimeout = obj.value;
       });
     });
 
-    this.atCmdHandler.getTimerValue(6).then((obj) => {
+    this.cmdChHandler.getTimerValue(6).then((obj) => {
       this.zone.run(() => {
         this.connectableTimeout = obj.value;
       });
     });
 
-    this.atCmdHandler.getCodecMask().then((mask) => {
+    this.cmdChHandler.getCodecMask().then((mask) => {
       this.zone.run(() => {
         this.codecAptX = ( mask & 0x1 ) ?true :false;
         this.codecAptXLL = ( mask & 0x2 ) ?true :false;
@@ -157,42 +157,42 @@ export class SettingsSnkPage {
 
   updatePowerOnConnect()
   {
-    this.atCmdHandler.setPowerOnConnect(this.pwrOnConnect);
+    this.cmdChHandler.setPowerOnConnect(this.pwrOnConnect);
   }
 
   updatePowerOnPairing()
   {
-    this.atCmdHandler.setPowerOnPairing(this.pwrOnPairing);
+    this.cmdChHandler.setPowerOnPairing(this.pwrOnPairing);
   }
 
   updateRemainOnPairing()
   {
-    this.atCmdHandler.setRemainOnPairing(this.remainOnPairing);
+    this.cmdChHandler.setRemainOnPairing(this.remainOnPairing);
   }
 
   updateReconnectLastAttempt()
   {
-    this.atCmdHandler.setReconnectLastAttempt(this.reconnectLastAttempt);
+    this.cmdChHandler.setReconnectLastAttempt(this.reconnectLastAttempt);
   }
 
   updatePairingTimeoutTo(isIdle)
   {
-    this.atCmdHandler.setPairingTimeoutTo(isIdle ?1 :0);
+    this.cmdChHandler.setPairingTimeoutTo(isIdle ?1 :0);
   }
 
   updateConnectPolicy(isLast)
   {
-    this.atCmdHandler.setConnectPolicy(isLast ?0 :1);
+    this.cmdChHandler.setConnectPolicy(isLast ?0 :1);
   }
 
   updatePairingTimeout()
   {
-    this.atCmdHandler.setTimer(4, this.pairingTimeout);
+    this.cmdChHandler.setTimer(4, this.pairingTimeout);
   }
 
   updateConnectableTimeout()
   {
-    this.atCmdHandler.setTimer(6, this.connectableTimeout);
+    this.cmdChHandler.setTimer(6, this.connectableTimeout);
   }
 
   updateCodec()
@@ -202,7 +202,7 @@ export class SettingsSnkPage {
     mask |= this.codecAptXLL ?(1 << 1) :0;
     mask |= this.codecAptXHD ?(1 << 2) :0;
     mask |= this.codecAac ?(1 << 3) :0;
-    this.atCmdHandler.setCodecMask(mask);
+    this.cmdChHandler.setCodecMask(mask);
   }
 
 }

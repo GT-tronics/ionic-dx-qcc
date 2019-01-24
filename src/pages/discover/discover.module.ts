@@ -9,5 +9,6 @@ import { DiscoverPage } from './discover';
   imports: [
     IonicPageModule.forChild(DiscoverPage),
   ],
+  exports: [DiscoverPage]
 })
 export class DiscoverPageModule {}

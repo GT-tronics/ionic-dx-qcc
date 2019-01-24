@@ -1,5 +1,5 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
-import { Platform, Events } from 'ionic-angular';
+import { Platform, Events, IonicPage } from 'ionic-angular';
 import { NavController, AlertController } from 'ionic-angular';
 import { AtCmdDispatcherService, BtDeviceInfo } from '../../providers/atcmd-dispatcher/atcmd-dispatcher.service';
 
@@ -7,6 +7,8 @@ import { AtCmdDispatcherService, BtDeviceInfo } from '../../providers/atcmd-disp
 // import { DeviceSnkPage } from '../../pages/device/device-snk'
 // import { DeviceSrcPage } from '../../pages/device/device-src'
 // import { FirmUpg8266Page } from '../../pages/firm-upg-8266/firm-upg-8266'
+
+@IonicPage()
 
 @Component({
   selector: 'page-discover',
@@ -19,7 +21,7 @@ export class DiscoverPage
   connectingDevInfos : { uuid : string, BtDeviceInfo };
   connectedPageNames : { uuid : string, string };
   pullToScanMsg : string = "Pull down to scan";
-  
+
   connectingPrompt : any = null;
 
   constructor(
@@ -167,7 +169,7 @@ export class DiscoverPage
       refresher.complete();
       this.zone.run(() => {
         this.pullToScanMsg = "Pull down to scan";
-      });    }, 3000);
+      });    }, 5000);
 
       this.zone.run(() => {
         this.pullToScanMsg = "Scanning ...";
@@ -425,5 +427,11 @@ export class DiscoverPage
   //     }
   //   }
   // }
+
+  navToShow3dPage()
+  {
+    this.navCtrl.push('Show3dPage', {'atCmdHandler' : null}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
+  }
+
 
 }
