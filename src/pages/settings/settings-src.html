@@ -39,14 +39,18 @@
             <ion-toggle [(ngModel)]="enablePktSzMismatchReconnectMedia" (ngModelChange)="updateEnablePktSzMismatchReconnectMedia()"></ion-toggle>
         </ion-item> -->
         <ion-item>
-            <ion-label>HFP (Voice Grade)</ion-label>
+            <ion-label>HFP (Low Grade Music/Voice)</ion-label>
             <ion-toggle [(ngModel)]="enableHfp" (ngModelChange)="updateEnableHfp()"></ion-toggle>
         </ion-item>
         <ion-item>
-            <ion-label>HFP/A2DP Switching</ion-label>
+            <ion-label>Switch HFP/A2DP (P1 Button)</ion-label>
             <ion-toggle [(ngModel)]="enableHfpA2dpSwitchingViaButton" (ngModelChange)="updateEnableHfpA2dpSwitchingViaButton()"></ion-toggle>
         </ion-item>
-        <ion-item-divider sticky color="dark">A2DP Codec</ion-item-divider>
+        <ion-item-divider sticky color="dark">A2DP Codec (High Grade Music)</ion-item-divider>
+        <ion-item>
+            <ion-label>SBC (Default)</ion-label>
+            <ion-toggle checked disabled></ion-toggle>
+        </ion-item>
         <ion-item>
             <ion-label>FASTSTREAM</ion-label>
             <ion-toggle [(ngModel)]="codecFastStream" (ngModelChange)="updateCodec()"></ion-toggle>
