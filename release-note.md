@@ -1,5 +1,8 @@
 # Release Notes for Ionic DataExchanger QCC 
 
+## R 0.8.13
+* Discover page can now properly returned fail reason for connection request.
+
 ## R 0.8.12
 * renamed the QCC SRC setting section titles.
 

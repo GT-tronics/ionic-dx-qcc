@@ -60,9 +60,13 @@ export class DiscoverPage
 
   handleBleDevChanged(params)
   {
-    //console.log('[DISCOVER]', JSON.stringify(params));
+    //console.log('[DISCOVER] ' + JSON.stringify(params));
 
-    if( params.name != 'QCC_SNK' && params.name != 'QCC_SRC' && params.name != 'DXS' )
+    if( params.name != 'QCC_SNK' && 
+        params.name != 'QCC_SRC' && 
+        params.name != 'DXS' && 
+        params.name != 'AtCmdHandler_NULL_CMD' &&
+        params.name != 'AtCmdHandler_NULL_DATA' )
     {
       return;
     }
@@ -73,75 +77,64 @@ export class DiscoverPage
       this.unlinkDevInfos = this.dispatcher.getUnlinkDevices();
     });
 
-    if( this.connectingPrompt == null )
+    if( this.connectingPrompt  )
     {
-      return;
+      this.connectingPrompt.dismiss();
+      this.connectingPrompt = null;
     }
 
     var activateFailedPrompt : boolean = false;
+    var failureReason : string = "internal error";
 
-    if( params.name ==  "QCC_SNK" && params.action == "connect" )
+    if( params.action == "connect" )
     {
-      this.connectingPrompt.dismiss();
-      this.connectingPrompt = null;
-      
       var devInfo = this.connectingDevInfos[params.uuid];
-
+  
       if( devInfo == null )
       {
         activateFailedPrompt = true;
       }
       else
       {
-        console.log("[DISCOVER] connect QCC-SNK");
-        this.navCtrl.push('DeviceSnkPage', {'devInfo' : devInfo}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
-        delete this.connectingDevInfos[params.uuid];
-        this.connectedPageNames[params.uuid] = 'DeviceSnkPage';
-      }
+        if( params.name ==  "QCC_SNK" )
+        {
+          console.log("[DISCOVER] connect QCC-SNK");
+          this.navCtrl.push('DeviceSnkPage', {'devInfo' : devInfo}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
+          delete this.connectingDevInfos[params.uuid];
+          this.connectedPageNames[params.uuid] = 'DeviceSnkPage';
+        }
+        else if( params.name ==  "QCC_SRC" )
+        {
+          console.log("[DISCOVER] connect QCC-SRC");
+          this.navCtrl.push('DeviceSrcPage', {'devInfo' : devInfo}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
+          delete this.connectingDevInfos[params.uuid];
+          this.connectedPageNames[params.uuid] = 'DeviceSrcPage';
+        }
+        else if( params.name ==  "DXS" )
+        {
+          console.log("[DISCOVER] connect DXS");
+          this.navCtrl.push('FirmUpg8266Page', {'devInfo' : devInfo}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
+          delete this.connectingDevInfos[params.uuid];
+          this.connectedPageNames[params.uuid] = 'FirmUpg8266Page';
+        }  
+      }      
     }
-    else if( params.name ==  "QCC_SRC" && params.action == "connect" )
+
+    if( params.action == "disconnect"  )
     {
-      this.connectingPrompt.dismiss();
-      this.connectingPrompt = null;
-
-      var devInfo = this.connectingDevInfos[params.uuid];
-
-      if( devInfo == null )
+      console.log("[DISCOVER] " + params.name + " disconnected");
+      if( params.info.status && params.info.status < 0 )
       {
         activateFailedPrompt = true;
-      }
-      else
-      {
-        console.log("[DISCOVER] connect QCC-SRC");
-        this.navCtrl.push('DeviceSrcPage', {'devInfo' : devInfo}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
-        delete this.connectingDevInfos[params.uuid];
-        this.connectedPageNames[params.uuid] = 'DeviceSrcPage';
-      }
-    }
-    else if( params.name ==  "DXS" && params.action == "connect" )
-    {
-      this.connectingPrompt.dismiss();
-      this.connectingPrompt = null;
-
-      var devInfo = this.connectingDevInfos[params.uuid];
-
-      if( devInfo == null )
-      {
-        activateFailedPrompt = true;
-      }
-      else
-      {
-        console.log("[DISCOVER] connect DXS");
-        this.navCtrl.push('FirmUpg8266Page', {'devInfo' : devInfo}, {animate: true, animation:'ios-transition', duration:500, direction:'forward'});
-        delete this.connectingDevInfos[params.uuid];
-        this.connectedPageNames[params.uuid] = 'FirmUpg8266Page';
+        failureReason = params.info.status;
       }
     }
 
     if( activateFailedPrompt )
     {
       let prompt = this.alertCtrl.create({
-        title: 'Connect failed [internal error]',
+        title: 'Connect Failed',
+        subTitle: failureReason,
         buttons: [
             {
                 text: 'Ok'
@@ -223,7 +216,8 @@ export class DiscoverPage
       this.connectingPrompt = null;
       console.log("[DISCOVER] Connect fail [" + ret.status + "]");
       let prompt = this.alertCtrl.create({
-        title: 'Connect failed [' + ret.status + ']',
+        title: 'Connect Failed',
+        subTitle: ret.status,
         buttons: [
             {
                 text: 'Ok'
